@@ -1,0 +1,360 @@
+﻿@using Microsoft.OneVet.UI.Web.Code
+@using Utilities
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html ng-app="acVnext">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft OneVet</title>
+    <link rel="stylesheet" href="/content/stylesheets/metro.min.css">
+    <link rel="stylesheet" href="/content/stylesheets/metro-responsive.min.css">
+    <link rel="stylesheet" href="/content/stylesheets/metro-schemes.min.css">
+    <link rel="stylesheet" href="/content/stylesheets/metro-rtl.min.css">
+    <link rel="stylesheet" href="~/Content/Stylesheets/metro-icons.min.css">
+    <link rel="stylesheet" href="/content/stylesheets/fabric.min.css">
+    <link rel="stylesheet" href="/content/stylesheets/fabric.components.min.css">
+    <link rel="stylesheet" href="/content/stylesheets/home.css">
+    <link rel="stylesheet" href="/content/stylesheets/common.css">
+    <link rel="stylesheet" href="/content/stylesheets/acDetails.css">
+
+    <link rel="stylesheet" href="~/Content/Stylesheets/request.css" />
+    <link rel="stylesheet" href="/content/stylesheets/request.css">
+    <link rel="stylesheet" href="/content/stylesheets/mdl2.css">
+    <link rel="stylesheet" href="/content/stylesheets/select2.min.css">
+    <link rel="stylesheet" href="/content/stylesheets/jquery-ui-1.10.0.custom.min.css" />
+    <link rel="stylesheet" href="/content/stylesheets/jHTMLArea.css">
+    <link rel="stylesheet" href="/Content/Stylesheets/spinner.css" />
+    <link rel="stylesheet" href="/Content/Stylesheets/multiple-select.css" />
+    <link rel="stylesheet" href="/Content/Stylesheets/angular-wizard.min.css" />
+    <link rel="stylesheet" href="/Content/Stylesheets/jquery.tagsinput.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/Stylesheets/angular-toastr.css" />
+  
+
+
+    <script type="text/javascript">
+        var appInsights=window.appInsights||function(config){
+            function r(config){t[config]=function(){var i=arguments;t.queue.push(function(){t[config].apply(t,i)})}}var t={config:config},u=document,e=window,o="script",s=u.createElement(o),i,f;for(s.src=config.url||"//az416426.vo.msecnd.net/scripts/a/ai.0.js",u.getElementsByTagName(o)[0].parentNode.appendChild(s),t.cookie=u.cookie,t.queue=[],i=["Event","Exception","Metric","PageView","Trace"];i.length;)r("track"+i.pop());return r("setAuthenticatedUserContext"),r("clearAuthenticatedUserContext"),config.disableExceptionTracking||(i="onerror",r("_"+i),f=e[i],e[i]=function(config,r,u,e,o){var s=f&&f(config,r,u,e,o);return s!==!0&&t["_"+i](config,r,u,e,o),s}),t
+        }({
+            instrumentationKey:"@SettingsFacade.GetString("serilog!write-to!ApplicationInsightsSink.applicationInsightsInstrumentationKey")"
+        });
+        window.appInsights=appInsights;
+        appInsights.trackPageView();
+    </script>
+    <!--[if IE]>
+    <style>
+        .removeArrow{
+    background:none!important;
+}
+
+    </style>
+    <![endif]-->
+
+</head>
+<body ng-controller="mainController">
+    <div id="sidebar-static-point" class="grid condensed no-margin">
+
+        <div class="row cells12">
+            <div id='left-part' class="place-left padding10 bg-black left_part desktop-view">
+                <div class="row">
+                    <div class="place-right fg-white toggle-class less-class">&#x003C;</div>
+                    <div class="place-right fg-white toggle-class more-class hide">&#x003E;</div>
+                </div>
+                <div class="row cells12 topspace40">
+                    <a href="#" class="fg-white">
+                        <img src="/images/icon-sidebar-home.svg" class="cell colspan12 padding10 no-padding-bottom">
+
+                        <p class="align-center sideBarFont">Home</p>
+                    </a>
+                </div>
+                <div class="row cells12">
+                    <a href="#requests" class="fg-white">
+                        <img src="/images/icon-sidebar-requests.svg" class="cell colspan12 padding10 no-padding-bottom">
+
+                        <p class="align-center sideBarFont">Requests</p>
+                    </a>
+                </div>
+                <div class="row cells12">
+                    <img src="/images/icon-sidebar-reports.svg" class="cell colspan12 padding10 no-padding-bottom">
+
+                    <p class="align-center fg-white sideBarFont">Reporting</p>
+                </div>
+                <div class="row cells12">
+                    <a href="#admin" class="fg-white">
+                        <img src="/images/mainnav-admin.svg" class="cell colspan12 padding10 no-padding-bottom">
+
+                        <p class="align-center fg-white sideBarFont">Admin</p>
+                    </a>
+                </div>
+            </div>
+
+            <div id="right-part" class="right_part ">
+                <div class="app-bar bg-whiteSkyblue">
+                    @*<div id="menu-button" class="place-left padding10 mobile-view"><span class="ms-Icon ms-Icon--menu mobile-view"></span> <img src="/images/onevet-logo.svg" alt="OneVet logo" height="48" width="225" /></div>*@
+
+                    <div class="place-left padding10 desktop-view"><img src="/images/onevet-logo.svg" alt="OneVet logo" height="48" width="200" /></div>
+                    @*<div class="place-right right-bar hide-side-bar mobile-view">
+                        <div class="show-drop-down no-margin no-padding">
+                            <span class="ms-Icon ms-Icon--bell  padding10 ms_icon_top">
+                                <sup><span class="icon_num">1</span></sup>
+                            </span>
+                        </div>
+                        <div class="mydrop-down">
+                            <div class="drop-down-item">
+                                <div class="text-light">Foo Company Inc.</div>
+                                <div class="text-bold">Pending review for request</div>
+                            </div>
+                            <div class="drop-down-item">
+                                <div class="text-light">Microsoft Partners LLC</div>
+                                <div class="text-bold">Business validation completed(Fail)</div>
+                            </div>
+                            <div class="drop-down-item">
+                                <div class="text-light">Adelphia Communications Corporation</div>
+                                <div class="text-bold">Anticorruption validation completed(Pass)</div>
+                            </div>
+                            <div class="drop-down-item">
+                                <div class="text-light">Foo Company Inc.</div>
+                                <div class="text-bold">Business validation completed(Fail)</div>
+                            </div>
+                            <div class="drop-down-item">
+                                <div class="text-light">Microsoft Partners LLC</div>
+                                <div class="text-bold">Anticorruption validation completed(Pass)</div>
+                            </div>
+                        </div>
+                    </div>*@
+
+
+                    <ul class="app-bar-menu place-right right-bar desktop-view">
+
+                        <li data-flexorderorigin="1">
+                            <div class="show-drop-down no-margin no-padding">
+                                <span class="ms-Icon ms-Icon--bell  padding10 ms_icon_top"><sup><span class="icon_num">1</span></sup></span>
+                            </div>
+                        </li>
+
+                        <!--                     <li data-flexorderorigin="1" >
+                                                <div class="show-drop-down no-margin no-padding">
+                                                <span class="ms-Icon ms-Icon--bell  padding10 ms_icon_top"><sup><span class="icon_num">1</span></sup>
+                                                </span>
+                                                </div>
+                                                <div class="mydrop-down">
+                                                   <div class="drop-down-item">
+                                                      <div class="text-light">What is OneVet</div>
+                                                      <div class="text-bold">What is OneVet</div>
+                                                   </div>
+                                                   <div class="drop-down-item">
+                                                      <div class="text-light">What is OneVet</div>
+                                                      <div class="text-bold">What is OneVet</div>
+                                                   </div>
+                                                   <div class="drop-down-item">
+                                                      <div class="text-light">What is OneVet</div>
+                                                      <div class="text-bold">What is OneVet</div>
+                                                   </div>
+                                                </div>
+
+                                             </li> -->
+                        <li data-flexorderorigin="2">
+
+                            <div class="dropdown-button place-right">
+                                <button class="button dropdown-toggle no-margin cp_select border-none no-padding">
+                                    <span class="ms-Icon ms-Icon--question  padding10 ms_icon_top">
+
+                                    </span>
+                                </button>
+                                <ul class="split-content d-menu" data-role="dropdown">
+                                    <li><a href="#">What is OneVet</a></li>
+                                    <li><a href="#">Getting Started</a></li>
+                                    <li><a href="#">Documentation</a></li>
+                                    <li><a href="#">Video Tutorials</a></li>
+                                    <li><a href="#">Support</a></li>
+                                    <li><a href="#">Provide Feedback</a></li>
+                                </ul>
+                            </div>
+
+                        </li>
+                        <li>
+
+                            <div class="dropdown-button place-right">
+                                <button class="button dropdown-toggle no-margin cp_select border-none no-padding">
+                                    <span class="ms-Icon ms-Icon--gear padding10 ms_icon_top">
+                                    </span>
+                                </button>
+                                <ul class="split-content d-menu" data-role="dropdown">
+                                    <li><a href="#">General Settings</a></li>
+                                    <li><a href="#">Page Settings</a></li>
+                                    <li><a href="#">Add New Widget</a></li>
+                                    <li><a href="#">Edit Layout</a></li>
+                                    <li><a href="#">Restore Layout</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        @if (Request.IsAuthenticated)
+                        {
+                            <li style="cursor:auto">
+                                <div class="padding10" style="padding-right:0">
+                                    <div style="color: #000; font-size: 0.75rem; text-align: right; line-height: 0.9rem; cursor:auto">Hello, @User.FirstName()!</div>
+                                    <div style="text-align: right; font-size: 0.75rem; line-height: 0.9rem"><a href="/Home/SignOut/">Logout</a>
+                                        <input type="hidden" id="userObjectId" value="@User.ObjectId()">
+                                    </div>
+                                </div>
+                            </li>
+                            <li style="cursor:auto">
+                                <span class="padding10"><img src="@User.Photo()" style="border: 1.5px solid #0078D7; border-radius: 24px;-webkit-border-radius: 24px;-moz-border-radius: 24px; cursor:auto" width="48" height="48" /></span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+              <div class="hide-side-bar" ng-view></div>
+            </div>
+        </div>
+
+        <!--/* mobile sidebar start*/ -->
+        @*<div class="row cells12 no-margin no-padding mobile-view">
+            <div id='left-part-mobile' class="left-sidebar place-left padding10 bg-black">
+
+                @if (Request.IsAuthenticated)
+                {
+                    <div class="row cells12 fg-white padding10 gray-border hide-side-bar">
+                        <span class="padding10"><img src="@User.Photo()" style="border-radius: 24px;-webkit-border-radius: 24px;-moz-border-radius: 24px;" width="48" height="48" /></span><div class="padding10 hello-text">Hello, @User.FirstName()!  <a href="/Home/SignOut/">Logout</a></div>
+                    </div>
+                }
+
+                <div class="row cells12">
+                    <a href="#" class="fg-white">
+                        <img src="/images/icon-sidebar-home.svg" class="cell colspan6 img-width place-left padding10">
+                        <p class="cell colspan6 sideBarFont padding20 no-padding-top padding-top-5">Home</p>
+                    </a>
+                </div>
+                <div class="row cells12">
+                    <a href="#requests" class="fg-white">
+                        <img src="/images/icon-sidebar-requests.svg" class="cell colspan6 img-width place-left padding10">
+                        <p class="cell colspan6 sideBarFont padding20 no-padding-top padding-top-5">Requests</p>
+                    </a>
+                </div>
+                <div class="row cells12">
+                    <a href="#admin" class="fg-white">
+                        <img src="/images/icon-sidebar-reports.svg" class="cell colspan6 img-width place-left padding10">
+                        <p class="cell colspan6 sideBarFont padding20 no-padding-top padding-top-5">Reporting</p>
+                    </a>
+                </div>
+                <div class="row cells12">
+                    <a href="#admin" class="fg-white">
+                        <img src="/images/mainnav-admin.svg" class="cell colspan6 img-width place-left padding10">
+                        <p class="cell colspan6 sideBarFont padding20 no-padding-top padding-top-5">Admin</p>
+                    </a>
+                </div>
+
+                <div class="row cells12 gray-border-top">
+                    <a href="#admin" class="fg-white">
+                        <p class="cell sideBarFont no-padding-top hello-text">Settings</p>
+                    </a>
+                    <a href="#admin" class="fg-white">
+                        <p class="cell sideBarFont no-padding-top hello-text">Help</p>
+                    </a>
+                </div>
+
+
+            </div>
+        </div>*@
+        <!--  /* mobile sidebar end*/-->
+
+    </div>
+
+    <div data-role="dialog" id="dialogPageDelete" class="padding20 dialog deletePageModal" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px;">
+        <h1 class="modalFont">Do you want to delete the page and all its questions?</h1>
+        <div class="place-right marginTop50">
+            <button class="pageDeleteConfirm button bt-next modalMargin" onclick="pageDeleteConfirmFunc(event)">Yes</button>
+
+            <button class="button modalCancel modalMargin" onclick="hideMetroDialog(event)">No</button>
+        </div>
+        <span class="dialog-close-button"></span>
+    </div>
+
+
+    <div data-role="dialog" id="dialogQuestionDelete" class="padding20 dialog deletePageModal" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px;">
+        <h1 class="modalFont">Do you want to delete this question and all of its children?</h1>
+        <div class="place-right marginTop50">
+            <button class="pageDeleteConfirm button bt-next modalMargin" onclick="questionDeleteConfirmFunc(event)">Yes</button>
+
+            <button class="button modalCancel modalMargin" onclick="hideMetroQuestionDialog(event)">No</button>
+        </div>
+        <span class="dialog-close-button"></span>
+    </div>
+
+
+    <div data-role="dialog" id="dialogChildQuestionDelete" class="padding20 dialog deletePageModal" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px;">
+        <h1 class="modalFont">Do you want to delete this child question?</h1>
+        <div class="place-right marginTop50">
+            <button class="pageDeleteConfirm button bt-next modalMargin" onclick="childQuestionDeleteConfirmFunc(event)">Yes</button>
+
+            <button class="button modalCancel modalMargin" onclick="hideMetroChildQuestionDialog(event)">No</button>
+        </div>
+        <span class="dialog-close-button"></span>
+    </div>
+
+    <div data-role="dialog" id="dialogEditChildQuestionDelete" class="padding20 dialog deletePageModal" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px;">
+        <h1 class="modalFont">Do you want to delete this child question?</h1>
+        <div class="place-right marginTop50">
+            <button class="pageDeleteConfirm button bt-next modalMargin" onclick="editChildQuestionDeleteConfirmFunc(event)">Yes</button>
+
+            <button class="button modalCancel modalMargin" onclick="hideMetroEditChildQuestionDialog(event)">No</button>
+        </div>
+        <span class="dialog-close-button"></span>
+    </div>
+
+    <div data-role="dialog" id="dialogEditQuestionDelete" class="padding20 dialog deletePageModal" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px;">
+        <h1 class="modalFont">Do you want to delete this question and all of its children?</h1>
+        <div class="place-right marginTop50">
+            <button class="pageDeleteConfirm button bt-next modalMargin" onclick="editQuestionDeleteConfirmFunc(event)">Yes</button>
+
+            <button class="button modalCancel modalMargin" onclick="hideMetroEditQuestionDialog(event)">No</button>
+        </div>
+        <span class="dialog-close-button"></span>
+    </div>
+    <script src="/scripts/lib/jquery-2.0.3.min.js"></script>
+    <script src="/scripts/lib/jquery-ui.js"></script>
+    <script src="/scripts/lib/jQueryDatatable.js"></script>
+    <script src="/scripts/lib/select2.min.js"></script>
+    <script src="/scripts/lib/angular.min.js"></script>
+    <script type="text/javascript" src="/scripts/lib/angular-toastr.tpls.js"></script>
+
+
+    <script src="/scripts/lib/angular-route.js"></script>
+    <script src="/scripts/lib/angular-wizard.min.js"></script>
+    <script src="~/scripts/lib/angular-datatables.js"></script>
+    <script src="/scripts/controllers/sidebarscript.js"></script>
+    <script src="/scripts/controllers/utilities.js"></script>
+    <script src="/scripts/controllers/questionfunctions.js"></script>
+    <script src="/scripts/lib/metro.min.js"></script>
+    <script src="/scripts/lib/jHtmlArea-0.8.0.js"></script>
+    <script src="/scripts/lib/jHtmlArea.ColorPickerMenu-0.8.0.js"></script>
+    <script src="/scripts/controllers/mainController.js"></script>
+    <script src="~/Scripts/controllers/newQuestionnaireController.js"></script>
+    <script src="/scripts/controllers/workflowLanding.js"></script>
+    <script src="/scripts/controllers/newWorkflowController.js"></script>
+    <script src="/scripts/controllers/workFlowStep2.js"></script>
+    <script src="/scripts/controllers/acDetails.js"></script> 
+    <script src="/scripts/controllers/requestLandingController.js"></script>
+    <script src="/scripts/controllers/requestSummaryController.js"></script>
+    <script src="~/Scripts/services/newWorkflowService.js"></script>
+    <script src="~/Scripts/controllers/onBoardingController.js"></script>
+    <script src="~/Scripts/controllers/userRolesController.js"></script>
+    <script src="~/Scripts/services/common-service.js"></script>
+    <script src="~/Scripts/services/onBoardingService.js"></script>
+    <script src="~/Scripts/services/acDetailsService.js"></script>
+    <script src="~/Scripts/controllers/scenarioController.js"></script>
+    <script src="~/Scripts/controllers/audienceController.js"></script>
+    <script src="~/Scripts/services/audienceService.js"></script>
+    <div data-role="dialog" id="spinnerDialog" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: 100px; height: 60px; visibility: hidden; left: 328.5px; top: 287.5px; background-color: transparent; border-color: transparent; border: none">
+        <canvas style="border: none; width: 200px" id="spinner"></canvas>
+    </div>
+
+    <script src="/Scripts/controllers/Spinner.js"></script>
+    <script src="/Scripts/lib/multiple-select.js"></script>
+    <script src="/Scripts/controllers/jquery.tagsinput.js"></script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+﻿@{
+    Layout = null;
+}
+<div ng-controller="scenarioController" ng-show="showSingleRequest">
+<form name="singleRequestForm" novalidate>
+<div class="row cells12">
+    <div class="place-left padding20 no-padding-bottom">
+        <h2 class="fg-black no-margin place-left txtFont headingClass">New request</h2>
+    </div>
+    <div class="padding20" ng-show="showSelectEntity">
+        <h4 class="place-left txtFontSide padding20 no-margin no-padding-left fg-black">Select entity type</h4>
+    </div>
+    <div class="padding20 no-padding-bottom no-padding-top">
+        <div ng-repeat='entity in justEntities'>
+            <label class="input-control radio small-check">
+                <input type="radio" name="n3" value="{{entity.id}}" ng-model="entities.name" ng-change="test(entities.name)">
+                <span class="check"></span>
+                <span class="caption">{{entity.text}}</span>
+            </label>
+        </div>
+    </div>
+    <div class="padding20" ng-show="showSelectScenario">
+        <h4 class="place-left txtFontSide padding20 no-margin no-padding-left fg-black">Select your scenarios</h4>
+    </div>
+    @*<span class="scenario-font clear-float margin10">Denied parties check</span>*@
+</div>
+<div class="row padding20 scenarios-cont">
+    <div ng-repeat="scenario in Scenarios" class="place-left">
+        <button id="{{scenario.text}}" ng-click="scenarioCheck(scenario.text)" class="shortcut-button padding10">
+            <span id="{{scenario.text}}-img" class="{{scenario.text}}-before-selection"></span>
+            <span ng-show="canShow(scenario.text)" class="badge"><span class="mif-checkmark mif-checkmark-color"></span></span>
+        </button>
+        <span class="scenario-font clear-float margin10">{{scenario.label}}</span>
+    </div>
+</div>
+<div class="border85 place-left"></div>
+<h3 class="place-left txtFontSide padding20 no-margin  fg-black">Provide entity information</h3>
+<div ng-show="isRequestInformation">
+    <div class="row padding20"> No scenarios selected</div>
+</div>
+<div ng-show="showDetails.DeniedPartyCheckValidation">
+    <div class="row padding20 cells4">
+        <div class="cell marginRight20">
+            <label class="control-label">First Name</label>
+            <div class="input-control text full-size">
+                <input id="firstName" type="text" ng-required="isFirstName" ng-model="model.name" class="form-control" name="firstName">
+                <span id="errorFirstName" class="error_Message" style="margin-top: -1%; padding-left: 1%">First Name is Must</span>
+            </div>
+        </div>
+        <div class="cell">
+            <label class="control-label">Last Name</label>
+            <div class="input-control text full-size">
+                <input id="lastName" name="lastName" ng-model="model.lastName" type="text" class="form-control" ng-required="isFirstName">
+                <span id="errorLastName" class="error_Message">Last Name is Must</span>
+            </div>
+        </div>
+    </div>
+
+    @*<div class="row padding20 cells4">
+        <div class="cell">
+            <label class="control-label">Email</label>
+            <div class="input-control text full-size">
+                <input id="emailId" name="email" ng-required="isEmail" class="form-control" type="email" ng-model="model.email" />
+                <span id="errorEmail" class="error_Message">Email is required</span>
+                <span id="errorValidEmail" class="error_Message">Valid email required</span>
+            </div>
+        </div>
+    </div>*@
+
+    <div class="row padding20 cells3 height11">
+        <div class="cell">
+            <label class="control-label">Address</label>
+            <div class="input-control text" style="width: 100% !important">
+                <input id="streetAddress" type="text" name="streetAddress" ng-model="model.streetAddress" ng-required="isPersonalAddress" placeholder="Street Address" class="margin10 no-margin-left no-margin-top placeholder_font form-control">
+                <input id="city" type="text" name="city" ng-model="model.city" ng-required="isPersonalAddress" placeholder="City" class="width35 placeholder_font form-control">
+                <input id="state" type="text" name="state" ng-model="model.state" ng-required="isPersonalAddress" placeholder="State" class="width35 placeholder_font form-control">
+                <input id="zip" type="text" name="zip" ng-model="model.zip" ng-required="isPersonalAddress" placeholder="Zipcode" class="width27 placeholder_font form-control">
+            </div>
+            <div>
+                <div id="personalCountry" style="margin-top: 3.125rem" class="input-control no-margin-left no-margin-right no-margin-bottom place-left widthSelect2" data-role="select">
+                    <select name="country" ng-model="model.country" id="selectCountry" ng-options="item.CountryId as item.CountryName for item in countries" ng-required="isPersonalAddress" ng-change="SetPersonalCountry()"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row cells3">
+        <div class="cell">
+            <span id="errorAddress" class="error_Message" style="padding-left: 1.25rem">All Address fields are required</span>
+        </div>
+    </div>
+</div>
+
+<div ng-show="showDetails.AntiCorruptionValidations">
+    <div class="border40"></div>
+    <div class="row padding20 cells4" >
+        <div class="cell marginRight20">
+            <label class="control-label">Company Legal Name</label>
+            <div class="input-control text full-size" style="width: 133% !important;">
+                <input id="companyName" type="text" ng-required="isCompanyName" ng-model="model.companyName" name="companyName" class="form-control">
+                <span id="errorCompany" class="error_Message">Company Name is Must</span>
+            </div>
+        </div>
+        @*<div class="cell" >
+            <label class="control-label">
+                Company English Name
+
+            </label>
+            <span class="help-tip"><span class="tooltip-content">Conditions</span></span>
+            <div class="input-control text full-size">
+                <input id="companyEnglishName" type="text" ng-model="model.companyEnglishName" name="companyEnglishName" class="form-control">
+                <span id="errorCompanyEnglishName" class="error_Message">Company Name in english is Must</span>
+            </div>
+        </div>*@
+    </div>
+    <div  class="row padding20 cells3 height11">
+        <div class="cell">
+            <label class="control-label">Company Legal Address</label>
+            <div class="input-control text full-size">
+                <input id="companyStreetAddress" type="text" name="companyStreetAddress" ng-model="model.companyStreetAddress" ng-required="isCompanyAddress" placeholder="Street Address" class="margin10 no-margin-left no-margin-top placeholder_font form-control">
+                <input id="companyCity" type="text" name="companyCity" ng-model="model.companyCity" ng-required="isCompanyAddress" placeholder="City" class="width35 placeholder_font form-control">
+                <input id="companyState" type="text" name="companyState" ng-model="model.companyState" ng-required="isCompanyAddress" placeholder="State" class="width35 placeholder_font form-control">
+                <input id="companyZip" type="text" name="companyZip" ng-model="model.companyZip" ng-required="isCompanyAddress" placeholder="Zipcode" class="width27 placeholder_font form-control">
+            </div>
+            <div id="companyCountry" style="margin-top: 3.125rem;width:100%" class="input-control margin50 no-margin-left no-margin-right no-margin-bottom widthSelect2" data-role="select">
+                <select id="selectCompanyCountry" ng-model="model.companyCountry" ng-options="item.CountryId as item.CountryName for item in countries" name="companyCountry" ng-required="isCompanyAddress" ng-change="SetSelectCompanyCountry()"></select>
+            </div>
+            @*  <div id="companyCountry" style="margin-top: 3.125rem;width:100%" class="input-control margin50 no-margin-left no-margin-right no-margin-bottom widthSelect2" data-role="select">
+                    <select id="selectCompanyCountry" ng-disabled="!model.companyCountry" ng-options="item.CountryId as item.CountryText for item in countries" name="companyCountry" ng-required="isCompanyAddress" ng-change="SetSelectCompanyCountry()">
+                        <option value="">All</option>
+                    </select>
+                </div>*@
+        </div>
+    </div>
+    <div  class="row cells3">
+        <div class="cell">
+            <span id="errorCompnayAddress" class="error_Message" style="padding-left: 1.25rem">All Company Address fields are required</span>
+        </div>
+    </div>
+    <div class="border40" ></div>
+    @*<div  class="row  padding20 cells4">
+        <div class="cell">
+            <label class="control-label">Company Phone Number (optional)</label>
+            <div class="input-control text full-size">
+                <span>+</span>
+                <input id="countryCode" name="countryCode" type="text" maxlength="3" class="width20 form-control companyPhone" ng-model="model.countryCode" move-focus>
+                -
+                <input id="companyPhone" name="companyPhone" type="text" ng-minlength="10" ng-pattern="/^[0-9]{1,10}$/" class="width55 form-control companyPhone" ng-model="model.companyPhone" move-focus>
+            </div>
+            <div>
+                <div class="cell">
+                    <span id="errorValidCompanyContact" class="error_Message">Not a valid phone number</span>
+                    <span id="errorValidCompanyContact10" class="error_Message">Must be atleast 10 digits</span>
+                </div>
+            </div>
+        </div>
+    </div>*@
+    @*<div class="row padding20 cells4" >
+        <div class="cell">
+            <label id="lblCompanyWebsite" class="control-label">Company Website (Optional)</label>
+            <div class="input-control text full-size">
+                <input id="companyWebsite" name="companyWebsite" ng-model="model.companyWebsite" class="form-control" type="url">
+                <span id="errorWebsite" class="error_Message">Enter valid website Url</span>
+                <span id="errorRequiredWebsite" class="error_Message">Website Url is must</span>
+            </div>
+        </div>
+    </div>*@
+    @*<div class="border40" ></div>
+    <div class="row padding20 cells4" >
+        <div  class="cell">
+            <label>Contact Name (optional)</label>
+            <div class="input-control text full-size">
+                <input id="contactName" type="text">
+            </div>
+        </div>
+    </div>*@
+    @*<div  class="row padding20 cells4">
+
+        <div class="cell">
+            <label class="control-label">Contact Number (optional)</label>
+            <div class="input-control text full-size">
+                <span>+</span>
+                <input id="personalCountryCode" name="personalCountryCode" ng-model="model.personalCountryCode" type="text" class="width20 form-control" maxlength="3" move-focus>
+                -
+                <input id="personalPhone" name="personalPhone" ng-pattern="/^[0-9]{1,10}$/" ng-model="model.personalPhone" type="text" class="width55 form-control" maxlength="12" move-focus>
+            </div>
+            <div >
+                <div class="cell">
+                    <span id="errorValidPhoneNumber" class="error_Message">Not a valid phone number</span>
+                    <span id="errorvalidPhoneNumber10" class="error_Message">Must be atleast 10 digits</span>
+                </div>
+            </div>
+        </div>
+    </div>*@
+    <div class="border40" ></div>
+    <div class="row padding20 cells4" >
+        <div class="row">
+            <div class="place-left width20 padding20 no-padding-left no-padding-top no-padding-bottom">
+                <span class="place-left clearLeft padding20 no-padding-bottom no-padding-left">Audience type</span>
+                <select id="audienceType" multiple="multiple" class="margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft"></select>
+            </div>
+            <div class="place-left width20">
+                <span class="place-left clearLeft padding20 no-padding-bottom no-padding-left">Audience sub-type</span>
+                <select id="audienceSubType" multiple="multiple" class="margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft"></select>
+            </div>
+        </div>
+        @*<div class="padding20 row inputPaddingClass" style="margin-top: -1%">
+            <div class="errorDiv place-left width20" style="width:26% !important">
+                <span id="errorAudience" class="error_Message">Please select Audience type</span>
+            </div>
+            <div class="errorDiv place-left width20">
+                <span id="errorAudience" class="error_Message">Please select Audience sub-type</span>
+            </div>
+        </div>*@
+    </div>
+    <div class="row padding20 cells4" >
+        <div class="cell">
+            <label class="control-label">Fiscal year</label>
+            <div class="input-control text full-size">
+                <div id="fiscalYear" style="width: 74% !important" class="input-control no-margin-left no-margin-right no-margin-bottom widthSelect2" data-role="select">
+                    <select id="selectFiscalYear" ng-model="model.fiscalYearSelected" ng-options="item.FiscalYearId as item.FiscalYearName for item in fiscalYears" name="fiscalYear" ng-required="isFiscalYear" ng-change="SetSelectFiscalYearCountry()"></select>
+                </div>
+            </div>
+            <div >
+                <div class="cell">
+                    <span id="errorFiscalyear" class="error_Message"> Select a Fiscal Year</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="border40" ng-show="isBusinessSponsor"></div>
+    @*<div class="row padding20 cells4 no-padding-bottom" ng-show="isBusinessSponsor">
+            <div class="cell">
+                <label class="control-label">Business Sponsor</label>
+                <div class="input-control text full-size">
+                    <input id="businessSponser" class="form-control" type="text" name="businessSponser" ng-model="model.businessSponser" ng-required="isBusinessSponsor">
+                    <span id="errorBuisinessSponser" class="error_Message">Business Sponsor is Must.</span>
+                </div>
+            </div>
+        </div>*@
+</div>
+<div ng-show="shouldShowNotificationSection()"></div>
+<div class="row padding20">
+    <div ng-show="shouldShowNotificationSection()">
+        <label class="input-control checkbox place-left clear-float">
+            <input type="checkbox">
+            <span class="check" id="checkboxHeight"></span>
+            <span class="caption">Keep me notified</span>
+        </label>
+        <span class="place-left clearLeft padding10 no-padding-right no-padding-left">Notify these people:</span>
+        <div class="input-control notifyArea textarea place-left clearLeft">
+            <input ng-model="model.notifyEmails" id="notifyMe" type="text" class="tags txtAreaWidth"/>
+            <span id="errorNotifyMe" class="error_Message">Please enter valid email address.</span>
+        </div>
+    </div>
+
+</div>
+<div class="row padding20">
+    <button class="button bt-next" ng-click="saveSingleRequest()" ng-disabled="isRequestInformation">Submit</button>
+    <button class="button bt-blue" ng-click="cancelSingleRequest()">Cancel</button>
+</div>
+</form>
+</div>
+<script src="~/Scripts/controllers/TagInput.js"></script>
+

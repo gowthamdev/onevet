@@ -1,0 +1,164 @@
+﻿@{
+    Layout = null;
+}
+
+<div ng-controller="requestSummaryController">
+    <div class="row cells12">
+        <div class="cell colspan8 padding20 no-padding-bottom">
+            <div class="row">
+                <h2 class="fg-black no-margin place-left txtFont headingClass">Requests</h2>
+                <h2 class="fg-black no-margin place-left txtFont headingClass">{{message}}</h2>
+            </div>
+        </div>
+        <div class="cell colspan8 padding20 no-padding-top">
+            <div class="row padding20 no-padding-left no-padding-bottom">
+                <h2 class="fg-black no-margin txtFont place-left">Vetting history</h2>
+            </div>
+            <div class="row colspan8">
+                <div class="accordion" data-role="accordion" style="width:100% !important;">
+                    <div class="frame active">
+                        <div class="heading">Latest</div>
+                        <div class="content no-padding-left">
+                            <!-- Bottom Section-->
+                            <div class="panel collapsed" data-role="panel" ng-click="togglePanel(!businessPanelOpened)">
+                                <div class="panel-header business">
+                                    <div class="row cells8">
+                                        <div class="cell colspan1 businessImage"></div>
+                                        <div class="cell colspan6 padding20">Business Validation</div>
+                                        <div class="cell colspan1 padding20"><a><span id="details">Details</span></a></div>
+                                    </div>
+                                </div>
+                                <div class="panel-content business" style="display:none">
+
+                                    <div class="row cells8">
+                                        <div class="cell colspan1 panel panelColor"></div>
+                                        <div class="cell colspan6 padding20">
+                                            <div>Match grade text:</div>
+                                            <div>Confidence code:</div>
+                                            <div>Duns Number:</div>
+                                            <div>
+                                                <h3>Match Grade Details</h3>
+                                            </div>
+                                            <div class="row cells8">
+                                                <!-- data table for desktop -->
+                                                <table class="desktop-view" style="width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="tableFont">Component</th>
+                                                            <th class="tableFont">Rating</th>
+                                                            <th class="tableFont">Score</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                            <div>
+                                                <table class="desktop-view" style="width: 100%;">
+                                                    <tr ng-repeat="x in gradeDetails">
+                                                        <td class="tableFont">{{ x.name }}</td>
+                                                        <td class="tableFont">{{ x.rating }}</td>
+                                                        <td class="tableFont">{{ x.size }}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div>
+                                                <h3>Marketability Details</h3>
+                                            </div>
+                                            <div>
+                                                <!-- data table for desktop -->
+                                                <table class="desktop-view" style="width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="tableFont">Indicator</th>
+                                                            <th class="tableFont">Description</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                            <div>
+                                                <table class="desktop-view" style="width: 100%;">
+                                                    <tr ng-repeat="x in gradeDetails">
+                                                        <td>{{ x.name }}</td>
+                                                        <td>{{ x.rating }}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel collapsed" data-role="panel" style="margin-top:20px;" ng-click="togglePanel(!businessPanelOpened)">
+                                <div class="panel-header antiCorruption">
+                                    <div class="row cells8">
+                                        <div class="cell colspan1 antiCorruptionImage"></div>
+                                        <div class="cell colspan7 padding10">
+                                            <div class="row cells4">
+                                                <label for="fiscalYear">Anti-corruption check</label>
+                                            </div>
+                                            <div class="row cells4" style="padding-top:15px">
+                                                <div class="cell colspan2 place-left">
+                                                    <span class="place-left clearLeft fontStyle">General Providers</span>
+                                                </div>
+                                                <div class="cell colspan2">
+                                                    <span class="place-left clearLeft fontStyle">Country Specific Providers</span>
+                                                </div>
+                                                <div class="cell colspan2">
+                                                    <span class="place-left clearLeft fontStyle"><a href="#">Request details</a></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<div class="cell colspan1 padding20"><a><span><u>Details</u></span></a></div>*@
+                                    </div>
+                                </div>
+                                <div class="panel-content business" style="display:none">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="frame">
+                        <div class="heading">FY2</div>
+                        <div class="content">Frame content</div>
+                    </div>
+                    <div class="frame">
+                        <div class="heading">FY3</div>
+                        <div class="content">Frame content</div>
+                    </div>
+                    <div class="frame">
+                        <div class="heading">FY4</div>
+                        <div class="content">Frame content</div>
+                    </div>
+                    <div class="frame">
+                        <div class="heading">FY5</div>
+                        <div class="content">Frame content</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cell colspan4 desktop-view borderRight padding20">
+            <!-- Right Section-->
+            <div class="row">
+                <h5 class="txtFont">Tenant</h5>
+            </div>
+            <div><h2 class="txtFont">Foo Company Inc</h2></div>
+            <div>
+                <ul class="no-padding-left" style="list-style-type:none">
+                    <li>Id:</li>
+                    <li>Address:</li>
+                    <li>Phone number:</li>
+                    <li>Website:</li>
+                    <li>Contact name:</li>
+                    <li>Contact number:</li>
+                </ul>
+            </div>
+            <div>
+                <h2 class="txtFont">John</h2>
+                <ul class ="no-padding-left" style="list-style-type:none">
+                    <li>Email:</li>
+                    <li>Personal:</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

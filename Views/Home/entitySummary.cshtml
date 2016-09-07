@@ -1,0 +1,161 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div ng-controller="requestSummaryController">
+    <div class="row cells12">
+        <div class="cell colspan8 padding20">
+            <div class="row padding20 no-padding-left">
+                <h2 class="fg-black no-margin txtFont place-left">Foo Company Inc</h2>
+            </div>
+                <div class="entityName">
+                    <div class="row cells8">
+                        <div class="cell colspan5 padding20">
+                                <ul class="no-padding-left" style="list-style-type:none">
+                                    <li>Id:</li>
+                                    <li>Address:</li>
+                                    <li>Phone number:</li>
+                                    <li>Website:</li>
+                                    <li>Audience</li>
+                                    <li>Audience sub-type</li>
+                                    <li>Contact name:</li>
+                                    <li>Contact number:</li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="cell colspan8 padding20 no-padding-top">
+            <div class="row padding20 no-padding-left">
+                <h2 class="fg-black no-margin txtFont place-left">Vetting history</h2>
+            </div>
+            <div class="row colspan8">
+                <div class="accordion" data-role="accordion" style="width:100% !important;">
+                    <div class="frame active">
+                        <div class="heading">Latest</div>
+                            <div class="content">
+                                <!-- Bottom Section-->
+                                <div class="panel collapsed" data-role="panel" ng-click="togglePanel(!businessPanelOpened)">
+                                    <div class="panel-header business">
+                                        <div class="row cells8">
+                                            <div class="cell colspan1 businessImage"></div>
+                                            <div class="cell colspan6 padding20">Business Validation</div>
+                                            <div class="cell colspan1 padding20"><a><span id="details">Details</span></a></div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-content business" style="display:none">
+
+                                        <div class="row cells8">
+                                            <div class="cell colspan1 panel panelColor"></div>
+                                            <div class="cell colspan6 padding20">
+                                                <div>Match grade text:</div>
+                                                <div>Confidence code:</div>
+                                                <div>Duns Number:</div>
+                                                <div>
+                                                    <h3>Match Grade Details</h3>
+                                                </div>
+                                                <div class="row cells8">
+                                                    <!-- data table for desktop -->
+                                                    <table class="desktop-view" style="width: 100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="tableFont">Component</th>
+                                                                <th class="tableFont">Rating</th>
+                                                                <th class="tableFont">Score</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                                <div>
+                                                    <table class="desktop-view" style="width: 100%;">
+                                                        <tr ng-repeat="x in gradeDetails">
+                                                            <td class="tableFont">{{ x.name }}</td>
+                                                            <td class="tableFont">{{ x.rating }}</td>
+                                                            <td class="tableFont">{{ x.size }}</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div>
+                                                    <h3>Marketability Details</h3>
+                                                </div>
+                                                <div>
+                                                    <!-- data table for desktop -->
+                                                    <table class="desktop-view" style="width: 100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="tableFont">Indicator</th>
+                                                                <th class="tableFont">Description</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                                <div>
+                                                    <table class="desktop-view" style="width: 100%;">
+                                                        <tr ng-repeat="x in gradeDetails">
+                                                            <td>{{ x.name }}</td>
+                                                            <td>{{ x.rating }}</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+            @* <div class="row cells colspan8 email" style="margin-top:20px">
+                    <div>
+                        <span class="emailImage"></span>
+                    </div>
+                </div>*@
+                                <div class="panel collapsed" data-role="panel" style="margin-top:20px" ng-click="togglePanel(!businessPanelOpened)">
+                                    <div class="panel-header email">
+                                        <div class="row cells8">
+                                            <div class="cell colspan1 emailImage"></div>
+                                            <div class="cell colspan6 padding20">Email Validation</div>
+                                            <div class="cell colspan1 padding20"><a><span><u>Details</u></span></a></div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-content business" style="display:none;">
+
+                                    </div>
+                                </div>
+                                <div class="panel collapsed" data-role="panel" style="margin-top:20px;" ng-click="togglePanel(!businessPanelOpened)">
+                                    <div class="panel-header employee">
+                                        <div class="row cells8">
+                                            <div class="cell colspan1 employeeImage"></div>
+                                            <div class="cell colspan6 padding20">Employee Validation</div>
+                                            <div class="cell colspan1 padding20"><a><span><u>Details</u></span></a></div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-content business" style="display:none">
+
+                                    </div>
+                                </div>
+                                <div class="panel collapsed" data-role="panel" style="margin-top:20px" ng-click="togglePanel(!businessPanelOpened)">
+                                    <div class="panel-header antiCorruption">
+                                        <div class="row cells8">
+                                            <div class="cell colspan1 antiCorruptionImage"></div>
+                                            <div class="cell colspan6 padding20">Anti-Corruption</div>
+                                            <div class="cell colspan1 padding20"><a><span><u>Details</u></span></a></div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-content business" style="display:none">
+
+                                    </div>
+                                </div>
+                         </div>
+                </div>
+                    <div class="frame">
+                        <div class="heading">FY2</div>
+                        <div class="content">Frame content</div>
+                    </div>
+                    <div class="frame">
+                        <div class="heading">FY3</div>
+                        <div class="content">Frame content</div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>

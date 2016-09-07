@@ -1,0 +1,655 @@
+﻿@{
+    Layout = null;
+}
+<div class="row cells12">
+    <div class="tabcontrol">
+        <ul class="tabs">
+            <li class="tabPointer"><a ng-click="redirectToAdmin()">Questionnaires</a></li>
+            <li class="tabPointer"><a ng-click="redirectToWorkFlowLanding()">Workflows</a></li>
+            <li class="active-tab tabPointer"><a ng-click="redirectToSystemSettings()">System Settings</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row cells12">
+    <div class="tabcontrol2 row cells12 padding20 no-padding-left" data-role="tabcontrol">
+        <ul class="tabs padding20 txtFont clearLeft paddingHeading">
+            <li class="active staticPosition"><a href="#premission">Permission</a></li>
+            <li class="staticPosition" ng-click="goToOnBoarding()"><a href="#onBoarding">Onboarding</a></li>
+            <li class="staticPosition" ng-click="goToRoles()"><a href="#roles_tab">Roles</a></li>
+            <li class="staticPosition" ng-click="goToAudience()"><a href="#audienceTab">Audience</a></li>
+            <li class="staticPosition" ng-click="goToRiskScores()"><a href="#riskScores">Risk scores</a></li>
+        </ul>
+
+        <div class="frames">
+            <div class="row margin20 show" style="display:block;!important">&nbsp;</div>
+            <div class="row cells12" id="premission" style="display:block;">
+
+                <div class="cell colspan3 right-border-grey min-height-400">
+
+                    <div ng-controller="groupController" class="row">
+
+                        <div class="cell padding10 no-padding-top no-padding-bottom no-padding-right">
+                            <div class="row cells4">
+                                <div class="cell colspan3">
+                                    <h2 class="fg-black place-left clearLeft txtFont padding10 no-padding-bottom">Groups</h2>
+                                </div>
+                                <div class="cell padding10 no-padding-left no-padding-top no-padding-bottom">
+                                    <span ng-click="showAddGroupPanel()" class="add-group-icon"><img src="~/images/generic-plus-circle-accent.png" /></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="groupList" class="cell">
+                            <!-- listview coloumnList -->
+                            <div class="groupListHeight">
+                                <div id="groupList{{group.GroupId}}" class="list-tab" ng-repeat="group in groupsArray" ng-click="showUsersAndPermissions(group.GroupId,$index)" ng-mouseover="showGroupButtons(group.GroupId)" ng-mouseout="hideGroupButtons(group.GroupId)" ng-class="{true:'hoverGroup', false:''}[$index==selectedIndex]">
+                                    <div id="displayGroupPanel{{group.GroupId}}">
+                                        <a href="#" onclick="return false"><span class="list-title">{{group.Name}}</span></a>
+                                        <div style="width:40px; float:right">
+                                            <span id="eGroup{{group.GroupId}}" class="eGroup ms-Icon ms-Icon--pencil ms-icon-inherit14" ng-click="showUsersAndPermissions(group.GroupId,$index);showEditGroupPanel(group.GroupId)"></span>
+                                            <span id="dGroup{{group.GroupId}}" class="dGroup ms-Icon ms-Icon--trash ms-icon-red15" ng-click="deleteGroup(group.GroupId, group.Name, group.DateTimeCreated, 1);$event.stopPropagation();"></span>
+                                        </div>
+                                    </div>
+
+                                    <div id="editGroupPanel{{group.GroupId}}" class="editGroupPanel">
+                                        <div>
+                                            <input id="g{{group.GroupId}}" type="text" ng-model="group.Name" text="{{group.Name}}" style="border: solid 1px #0078d6!important" ng-click="$event.stopPropagation()" required>
+                                            <span class="error_Message">Group name is required.</span>
+                                        </div>
+                                        <div>
+                                            <a href="#" ng-click="updateGroup(group.GroupId, group.Name, group.DateTimeCreated, 0);$event.stopPropagation();" onclick="return false" class="fontEdit"><img src="~/images/generic-tick-small-accent@2x.png" /> Save</a>&nbsp;
+                                            <a href="#" ng-click="cancelGroupEdit(group.GroupId);$event.stopPropagation();" onclick="return false" class="fontEdit"><img src="~/images/generic-cross-12px-accent@2x.png" alt="cancel-icon" /> Cancel</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row padding20 no-padding-right" id="addGroupPanel">
+                            <div class="cell group-form-bg">
+                                <div class="input-control text full-size input-type-left-right-padding5">
+                                    <input id="groupName" type="text" ng-model="groupName" class="form-input-grouppanel" placeholder="Group name" ng-change="groupNameValidation()" ng-class="{true: 'errorGroup'}[errorMessage]" required>
+                                    <div class="errMsg dispInline" ng-show="errorMessage">Enter a valid name.</div>
+
+                                </div>
+                                <div class="margin4">
+                                    <a href="#" ng-click="saveGroup()" onclick="return false" ng-class="{true: 'disablePage'}[groupDisabled]"><img src="~/images/generic-tick-small-accent@2x.png" /> Add</a>&nbsp;
+                                    <a href="#" ng-click="cancelGroup()" onclick="return false" class="margin_10"><img src="/images/generic-cross-12px-accent@2x.png"> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-role="dialog" id="dialogDeleteGroup" class="padding20 dialog deletePageModal" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px; border:2px solid gray;">
+                            <h1 class="modalFont">Do you want to delete this group?</h1>
+                            <div class="place-right marginTop50">
+                                <button class="pageDeleteConfirm button bt-next modalMargin" ng-click="updateGroup(group.GroupId, group.Name, group.DateTimeCreated, 1);$event.stopPropagation();">Yes</button>
+
+                                <button class="button modalCancel modalMargin" ng-click="deleteGroupCancel()">No</button>
+                            </div>
+                            <span class="dialog-close-button"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cell colspan3 right-border-grey min-height-400" id="users">
+                    <div ng-controller="userController">
+
+                        <div class="row cells4">
+                            <div class="cell colspan3 padding10 no-padding-top no-padding-bottom no-padding-right">
+                                <h2 class="fg-black place-left clearLeft txtFont padding10 no-padding-bottom">Users</h2>
+                            </div>
+                            <div class="cell padding10 no-padding-left no-padding-top no-padding-bottom">
+                                @*<span class="ms-Icon plus-circle-icon place-right" ng-click="showAddUserPanel()"></span>*@
+                                <span ng-click="showAddUserPanel()" class="add-group-icon"><img src="~/images/generic-plus-circle-accent.png" /></span>
+
+                            </div>
+                        </div>
+
+                        <div class="groupListHeight">
+                            <div class="row" id="userList">
+                                <div id="userList{{user.UserId}}" class="list-tab" ng-repeat="user in usersArray" ng-mouseover="showUserButtons(user.UserId)" ng-mouseout="hideUserButtons(user.UserId)">
+                                    <a href="#" onclick="return false"><span class="list-title">{{user.Email}}</span></a>
+                                    <div style="width:20px; float:right">
+                                        <span id="dUser{{user.UserId}}" class="dGroup ms-Icon ms-Icon--trash ms-icon-red15" ng-click="showUserDialog(user.UserId)"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row padding20 no-padding-right" id="addUserPanel">
+                            <div class="cell group-form-bg">
+                                <div class="input-control text input-type-left-right-padding5 full-size">
+                                    <input id="userName" type="text" ng-model="userName" class="form-input-grouppanel" placeholder="Email Address" required ng-change="emailValidation()" ng-class="{true: 'errorGroup'}[errorMessage_User]">
+                                    <div class="errMsg dispInline" ng-show="errorMessage_User">Enter a valid username.</div>
+
+
+                                </div>
+                                <div class="margin4">
+                                    <a href="#" ng-click="saveUser()" onclick="return false" ng-class="{true: 'disablePage'}[userDisabled]"><img src="~/images/generic-tick-small-accent@2x.png" /> Add</a>&nbsp;
+                                    <a href="#" ng-click="cancelUser()" onclick="return false" class="margin_10"><img src="~/images/generic-cross-12px-accent@2x.png" alt="cancel-icon" /> Cancel</a>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div data-role="dialog" id="dialogDeleteUser" class="padding20 dialog deletePageModal" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px; border:2px solid gray;">
+                            <h1 class="modalFont">Are you sure you want to remove this user from this group?</h1>
+                            <div class="place-right marginTop50">
+                                <button class="pageDeleteConfirm button bt-next modalMargin" ng-click="removeUserFromGroup(user.UserId);$event.stopPropagation();">Yes</button>
+
+                                <button class="button modalCancel modalMargin" ng-click="deleteUserCancel()">No</button>
+                            </div>
+                            <span class="dialog-close-button"></span>
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <div class="cell colspan6" id="roles" ng-controller="roleController">
+                    <div class="row right-border-grey min-height-400 padding10 no-padding-right no-padding-bottom">
+                        <div class="row cells3 margin20">
+                            <h2 class="fg-black no-margin place-left clearLeft txtFont">Permissions</h2>
+                        </div>
+                        <div class="row">
+                            <div class="groupListHeight">
+                                <div class="row cells8">
+                                    <div class="cell colspan4"> </div>
+                                    <div class="cell align-center">All</div>
+                                    <div class="cell align-center">Read</div>
+                                    <div class="cell align-center">Add/Edit</div>
+                                    <div class="cell align-center">Delete</div>
+                                </div>
+                                <div ng-repeat="roleType in roleTypeArray" class="row cells8">
+
+                                    <div class="cell colspan4" style="padding-top:7px!important">{{roleType.RoleTypeName}}</div>
+                                    <div class="cell align-center">
+                                        <label class="input-control checkbox small-check">
+                                            <input type="checkbox" value="{{roleType.RoleTypeId}}" id="{{roleType.RoleTypeId}}" ng-change="toggleRoleTypeToGroup(roleType.RoleTypeId)" ng-model="roleType[roleType.RoleTypeId]" ng-checked="areAllChecked(roleType.RoleTypeId)==3" name="{{roleType.RoleTypeId}}" />
+                                            <span class="check"></span>
+                                        </label>
+                                    </div>
+                                    <div ng-repeat="role in roleType.Roles | orderBy : 'ActionType'" class="cell align-center">
+                                        <label class="input-control checkbox small-check">
+                                            <input type="checkbox" value="{{role.RoleId}}" id="{{role.RoleId}}" roleTypeId="{{role.RoleTypeId}}" ng-checked="isInRoleArray(role.RoleId)!=-1" ng-change="toggleRoleToGroup(role.RoleId)" ng-model="roleType.Roles[role.RoleId]" name="{{role.RoleId}}" />
+                                            <span class="check"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row padding20">
+                        <div class="place-right">
+                            <button class="button bt-next saveQuestions" ng-click="savePermissions()">Save</button>
+                            <button class="button bt-blue saveQuestions" ng-click="refreshPermissions()">Cancel</button>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>            
+            <div class="row cells12 padding10 no-padding-left" id="onBoarding" ng-controller="onBoardingController" style="display: none;">
+                <div class="cell colspan2 width20 right-border-grey min-height-400">
+                    <div class="row cell3">
+                        <div class="row cells3 margin20" >
+                            <h2 class="fg-black place-left clearLeft txtFont row cells3 padding10 no-padding-bottom">
+                            Tenants
+                            <span ng-click="!editInProgress && showAddTenantPanel()"  class="add-group-icon no-padding-top">
+                                <img src="~/images/generic-plus-circle-accent.png" />
+                            </span>
+                            </h2>
+                        </div>
+                        <div id="tenantList" class="listview">
+                            <div class="tenantListHeight">
+                                <div id="tenantList{{tenant.TenantId}}" data-name="{{tenant.TenantName}}" class="list-tab" ng-repeat="tenant in tenants track by $index" ng-click="showTenantUsersAndPermissions(tenant.TenantId)" ng-mouseover="showTenantEditPanel(tenant.TenantId,tenant.TenantName,$event)" ng-mouseout="hideTenantEditPanel(tenant.TenantId)">
+                                    <div id="displayTenantPanel{{tenant.TenantId}}">
+                                        <a href="#" ng-click="getTenantDetails(tenant.TenantId, tenant.TenantName, $event);"><span class="list-title">{{tenant.TenantName}}</span></a>
+                                        <div style="width:40px; float:right" >
+                                            <span id="editTenant{{tenant.TenantId}}" class="eGroup ms-Icon ms-Icon--pencil ms-icon-inherit14" ng-click="!editInProgress && editTenant(tenant.TenantId, tenant.TenantName,$event);$event.stopPropagation();"></span>
+                                            @*<span id="deleteTenant{{tenant.TenantId}}" class="dGroup ms-Icon ms-Icon--trash ms-icon-red15" ng-click="deleteTenant(tenant.TenantId, tenant.TenantName);$event.stopPropagation();" ng-click ="deleteTenantdialog()"></span>*@
+                                        </div>
+                                    </div>
+                                    <div id="editTenantPanel{{tenant.TenantId}}" class="editGroupPanel">
+                                        <div>
+                                            <input id="t{{tenant.TenantId}}" type="text" ng-model="tenant.TenantName" ng-click="$event.stopPropagation()" required>
+                                            <span class="error_Message">Tenant is required.</span>
+                                        </div>
+                                        <div>
+                                            <a href="#" ng-click="updateTenant(tenant,$event);" onclick="return false"><img src="/images/generic-tick-small-accent@2x.png">Save</a>&nbsp;
+                                            <a href="#" ng-click="closeTenantEdit(tenant.TenantId, tenant.TenantName);$event.stopPropagation();" onclick="return false"><img src="/images/generic-cross-12px-gray@2x.png" alt="cancel-icon">Cancel</a>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                        <div class="row padding20 no-padding-right cells4" id="addTenantPanel" ng-show="createTenant">
+                            <div class="group-form-bg" style="padding: 0px 5px 0px 5px;">
+                                <div class="input-control text full-size input-type-left-right-padding5">
+                                    <input id="TenantName" type="text" ng-model="TenantName" placeholder="Tenant name" ng-change="tenantNameValidation()" ng-class="{true: 'errorTenant'}[errorMessage]" required>
+                                    <div class="errMsg dispInline" ng-show="errorMessage">Enter a valid name.</div>                               
+                                 </div>
+                                <div class="margin4">
+                                    <a href="#" ng-click="addTenant()" onclick="return false" ng-class="{true: 'disablePage'}[TenantDisabled]"><img src="/images/generic-tick-small-accent@2x.png">Add</a>&nbsp;
+                                    <a href="#" ng-click="cancelTenant()" onclick="return false"><img src="/images/generic-cross-12px-gray@2x.png" alt="cancel-icon"> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div data-role="dialog" id="dialogDeleteTenant" class="padding20 dialog deletePageModal" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px; border:2px solid gray;">
+                            <h1 class="modalFont">Are you sure you want to delete the Tenant?</h1>
+                            <div class="place-right marginTop50">
+                                <button class="pageDeleteConfirm button bt-next modalMargin" onclick="return true">Yes</button>
+
+                                <button class="button modalCancel modalMargin" onclick="return false">No</button>
+                            </div>
+                            <span class="dialog-close-button"></span>
+                        </div>*@
+                    </div>
+                </div>
+                <div class="cell colspan2 width20 right-border-grey min-height-400">
+                    <div class="row cell3">
+                        <div class="row cells3 margin20">
+                            <h2 class="fg-black place-left clearLeft txtFont row cells3 padding10">
+                            Tenant admins
+                            <span ng-click="showAddTenantAdminPanel()" class="add-group-icon no-padding-top">
+                                <img src="~/images/generic-plus-circle-accent.png" />
+                            </span>
+                            </h2>
+                        </div>
+                        <div class="listview" id="userList">
+                            <div id="userList{{user.UserId}}" class="list-tab" ng-repeat="user in tenantAdmins" ng-mouseover="showUserButtons(user.UserId)" ng-mouseout="hideUserButtons(user.UserId)">
+                                <a href="#" onclick="return false"><span class="list-title">{{user.TenantUserEmail}}</span></a>
+                                <div style="width:20px; float:right">
+                                    <span id="dUser{{user.UserId}}" class="dUser ms-Icon ms-Icon--trash ms-icon-red15" ng-click="removeTenantUser(user.UserId, user.TenantUserEmail, user.TenantUserId);$event.stopPropagation();"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row cells4" id="addTenantAdminPanel" ng-show="createTenantUser">
+                            <div class="group-form-bg" style="padding: 0px 5px 0px 5px;">
+                                <div class="input-control text full-size input-type-left-right-padding5">
+                                    <input id="TenantUser" type="text" ng-model="TenantUser" placeholder="Tenant Admin" ng-change="adminEmailValidation()" ng-class="{true: 'errorGroup'}">
+                                    <div class="errMsg dispInline" ng-show="errorMessage_User">Enter a valid username.</div>
+                                </div>
+                                <div class="margin4">
+                                    <span id="errorTitle" class="error_Message">Tenant name is required.</span>
+                                    <a href="#" ng-click="addTenantUser()" onclick="return false" ng-class="{true: 'disablePage'}[tenantUserDisabled]"><img src="/images/generic-tick-small-accent@2x.png">Add</a>&nbsp;
+                                    <a href="#" ng-click="cancelTenantUser()" onclick="return false"><img src="/images/generic-cross-12px-gray@2x.png" alt="cancel-icon"> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-role="dialog" id="dialogDeleteTenantAdmin" class="padding20 dialog deletePageModal styleDialogTenantAdmin">
+                            <h1 class="modalFont">Are you sure you want to delete the Tenant admin?</h1>
+                            <div class="place-right marginTop50">
+                                <button class="pageDeleteConfirm button bt-next modalMargin" onclick="return true">Yes</button>
+                                <button class="button modalCancel modalMargin" onclick="return false">No</button>
+                            </div>
+                            <span class="dialog-close-button"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell colspan2 width20 right-border-grey min-height-400">
+                    <div class="row cell3">
+                        <div class="row cells3 margin20">
+                            <h2 class="fg-black place-left clearLeft txtFont row cells3 padding10">
+                            Audience
+                            <span ng-click="showAudiencePanel($event)" class="add-group-icon no-padding-top">
+                                <img src="~/images/generic-plus-circle-accent.png" />
+                            </span>
+                            </h2> 
+                        </div>
+                        <div class="listview" id="audienceList" style="padding: 0px 10px 0px;" ng-show="tenantAudienceTypes.length > 0">
+                            <div style="padding-bottom:10px">
+                                <span style="font-weight:bold;">Type:</span>
+                                <span class="audienceLables" ng-repeat="audience in tenantAudienceTypes">{{audience.AudienceTypeName}}
+                                    <span ng-if="!$last">,</span>
+                                </span>
+                            </div>
+                            <div>
+                                <span style="font-weight:bold;">SubType:</span>
+                                <span  class="audienceLables" ng-repeat="audience1 in tenantAudienceSubTypes">{{audience1.AudienceSubTypeName}}
+                                    <span ng-if="!$last">,</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row cells4" id="audiencePanel" ng-show="selectAudience" style="padding-top: 10px">
+                            <div class="group-form-bg" style="padding:0px 0px 0px 5px;">
+                                <div class="row">
+                                    <div class="place-left widthm100">
+                                        <span class="place-left clearLeft padding20 no-padding-bottom no-padding-left">Type</span>
+                                        <select id="audienceType" multiple="multiple" class="margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft"></select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="place-left widthm100">
+                                        <span class="place-left clearLeft padding20 no-padding-bottom no-padding-left">SubType</span>
+                                        <select id="audienceSubType" multiple="multiple" class="margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft"></select>
+                                    </div>
+                                </div>
+                                <div class="group-form-bg padding10 no-padding-left">
+                                    @*<span id="errorTitle" class="error_Message">Tenant name is required.</span>*@
+                                    <a href="#" ng-click="setAudienceTypes()" onclick="return false"><img src="/images/generic-tick-small-accent@2x.png">Add</a>&nbsp;
+                                    <a href="#" ng-click="cancelAudience()" onclick="return false"><img src="/images/generic-cross-12px-gray@2x.png" alt="cancel-icon"> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell colspan4 width35 padding20 no-padding-bottom no-padding-top right-border-grey min-height-400">
+                    <div class="row cells6 margin20">
+                        <h2 class="fg-black place-left clearLeft txtFont row cells3 padding10">Scenarios and providers</h2>
+                    </div>
+                    <div class="row cells6" ng-show="showAllSenarios">
+                        <div class="cell colspan5 padding20" style="padding-top:10px">
+                            <div class="row cells5">
+                                <div class="input-control checkbox">
+                                    <div ng-repeat="senario in senarios" ng-click="showTenantUsersAndPermissions(tenant.TenantId)" ng-mouseover="showTenantEditPanel(tenant.TenantId)" ng-mouseout="hideTenantEditPanel(tenant.TenantId)">
+                                        <label>
+                                            <input type="checkbox" ng-model="selectedScenarios.ids[senario.ScenarioId]">
+                                            <span class="check" id="checkboxHeight"></span>
+                                            <span class="list-title">{{senario.ScenarioText}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row padding20" ng-show="showSaveAndCancel">
+                    <div class="place-right padding20" style="padding-right:120px">
+                        <button class="button bt-next saveQuestions" ng-click="saveTenantDetails()">Save</button>
+                        <button class="button bt-blue saveQuestions" ng-click="cancelTenantDetails()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row cells12" id="roles_tab" style="display: none;" ng-controller="userRolesController">
+                <div class="cell colspan2 width20 right-border-grey min-height-400">
+                    <div class="row cell3">
+                        <div class="row cells3 margin20 padding20 no-padding-bottom no-padding-top">
+                            <h2 class="fg-black place-left clearLeft txtFont row cells3">
+                            Role
+                            <span class="add-group-icon no-padding-top" ng-click="!editInProgress  && showRolePanel()">
+                                <img src="~/images/generic-plus-circle-accent.png" />
+                            </span>
+                            </h2>
+                        </div>
+                        <div id="roleList" class="listview">
+                            <div class = "roleListHeight">
+                            <div id="roleList{{role.RoleId}}" class="list-tab" ng-repeat="role in roles track by $index" ng-click="showRolesAndPermissions(role.RoleId)" ng-mouseover="showRoleEditPanel(role.RoleId)" ng-mouseout="hideRoleEditPanel(role.RoleId)">
+                                <div id="displayRolePanel{{role.RoleId}}">
+                                    <a href="#" ng-click="getRoleDetails(role.RoleId, role.RoleName, $event);"><span class="list-title">{{role.RoleName}}</span></a>
+                                    <div style="width:40px; float:right">
+                                        <span id="editRole{{role.RoleId}}" class="eGroup ms-Icon ms-Icon--pencil ms-icon-inherit14" ng-click="!editInProgress  && editRole(role,$event);showEditRolePanel(role.RoleId);$event.stopPropagation();"></span>
+                                        <span id="deleteRole{{role.RoleId}}" class="dGroup ms-Icon ms-Icon--trash ms-icon-red15" ng-click="!editInProgress  && deleteRole(role.RoleId, role.RoleName);$event.stopPropagation();"></span>
+                                    </div>
+                                </div>
+                                <div id="editRolePanel{{role.RoleId}}" class="editGroupPanel">
+                                    <div>
+                                        <input id="r{{role.RoleId}}" type="text" ng-model="role.RoleName"   required>
+                                        <span class="error_Message">Tenant is required.</span>
+                                    </div>
+                                    <div>
+                                        <a href="#" ng-click="updateRole(role,$event);" onclick="return false"><span class="ms-Icon ms-Icon--check"></span> Save</a>&nbsp;
+                                        <a href="#" ng-click="closeRoleEdit(role.RoleId, role.RoleName);$event.stopPropagation();" onclick="return false"><span class="ms-Icon">x</span> Cancel</a>
+                                    </div>
+                                   </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  padding20 no-padding-right cells4" id="addRolePanel" ng-show="createRole">
+                            <div class="group-form-bg">
+                                <div class="input-control text full-size input-type-left-right-padding5">
+                                    <input id="RoleName" type="text" ng-model="RoleName" placeholder="Role name" ng-change="RoleNameValidation()" ng-class="{true: 'errorContact'}[errorMessage]"  required>
+                                    <div class="errMsg dispInline" ng-show="errorMessage">Enter a valid name.</div>
+                                </div>
+                                <div class="margin4">
+                                    <a href="#" ng-click="addRole()" onclick="return false" ng-class="{true: 'disablePage'}[ContactDisabled]"><span class="ms-Icon ms-Icon--check"></span> Add</a>&nbsp;
+                                    <a href="#" ng-click="cancelRole()" onclick="return false"><span class="ms-Icon">x</span> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-role="dialog" id="dialogDeleteRole" class="padding20 dialog deletePageModal styleDialogTenantAdmin">
+                            <h1 class="modalFont">Are you sure you want to delete the Role?</h1>
+                            <div class="place-right marginTop50">
+                                <button class="pageDeleteConfirm button bt-next modalMargin" onclick="return true">Yes</button>
+                                <button class="button modalCancel modalMargin" onclick="return false">No</button>
+                            </div>
+                            <span class="dialog-close-button"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell colspan2 width20 padding20 no-padding-bottom no-padding-right no-padding-top right-border-grey min-height-400">
+                    <div class="row cell3">
+                    <div class="areaListHeight">
+                        <div class="row cells3 margin20 padding20 no-padding-top no-padding-left no-padding-right">
+                            <h2 class="fg-black place-left clearLeft txtFont row cells3">Area</h2>
+                        </div>
+                        <div ng-show="showAreas">
+                            <div class="input-control text full-size">
+                                <label class="input-control checkbox place-left clearLeft checkBoxMargin">
+                                    <input type="checkbox" ng-model="allAreas" ng-change="selectAllAreas()">
+                                    <span class="check smallCheckbox"></span>
+                                    <span class="caption filterClass">All</span>
+                                </label>
+                            </div>
+                            <div class="input-control text full-size" ng-repeat="area in areas">
+                                <label class="input-control checkbox place-left clearLeft checkBoxMargin">
+                                    <input type="checkbox"  class="area" ng-model="selection.ids[area.AreaId]" ng-change="areaChange()">
+                                    <span class="check smallCheckbox"></span>
+                                    <span class="caption filterClass ">{{area.AreaName}}</span>
+                                </label>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="cell colspan2 width20 padding20 no-padding-bottom no-padding-right no-padding-top right-border-grey min-height-400">
+                    <div class="row cell3">
+                        <div class="countryListHeight">
+                        <div class="row cells3 margin20 padding20 no-padding-top no-padding-left no-padding-right">
+                            <h2 class="fg-black place-left clearLeft txtFont row cells3">Country</h2>
+                        </div>
+                        <div ng-show="showCountries">
+                            <div id="countries" class="input-control text full-size ">
+                                <label class="input-control checkbox place-left clearLeft checkBoxMargin">
+                                    <input type="checkbox" class="countries" ng-model="allCountries" ng-change="selectAllCountries()">
+                                    <span class="check smallCheckbox"></span>
+                                    <span class="caption filterClass">All</span>
+                                </label>
+                            </div>
+                            <div class="input-control text full-size" ng-repeat="country in countries">
+                                <label class="input-control checkbox place-left clearLeft checkBoxMargin">
+                                    <input type="checkbox" class="country" ng-model="countrySelection.ids[country.CountryId]" ng-change="getUserOnCountryIfExists()">
+                                    <span class="check smallCheckbox"></span>
+                                    <span class="caption filterClass">{{country.CountryName}}</span>
+                                </label>
+                            </div>
+                        </div>
+                       </div>
+                    </div>
+                </div>
+                <div class="cell colspan4 right-border-grey min-height-400">
+                    <div class="row cell3">
+                        <div class="row cells3 margin20">
+                            <h2 class="fg-black place-left clearLeft txtFont row cells3 padding10">
+                            Contact name
+                            <span class="add-group-icon no-padding-top" ng-click="showAddContactNamePanel()" ng-show ="showAddContactIcon" style="margin-top:0px">
+                                <img src="~/images/generic-plus-circle-accent.png" />
+                            </span>
+                            </h2>
+                        </div>
+                        <div class="listview" id="userList">
+                            <div id="userList{{roleUsers.UserId}}" class="list-tab" ng-if="roleUsers" ng-mouseover="showUserButtons(roleUsers.UserId)" ng-mouseout="hideUserButtons(roleUsers.UserId)">
+                                <a href="#" onclick="return false"><span class="list-title">{{roleUsers.UserEmail}}</span></a>
+                                <div style="width:20px; float:right">
+                                    @*<span id="rUser{{roleUsers.UserId}}" class="eGroup ms-Icon ms-Icon--pencil ms-icon-inherit14" ng-click="editRoleUser(name.UserId, name.Email, name.RoleUserId,$event);$event.stopPropagation();"></span>*@
+                                    <span id="deleteUser{{roleUsers.UserId}}" class="dUser ms-Icon ms-Icon--trash ms-icon-red15" ng-click="removeRoleUser(roleUsers.UserId, roleUsers.UserEmail, roleUsers.RoleUserId);$event.stopPropagation();"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row cells4" id="addContactNamePanel" ng-show="createContactName">
+                            <div class="group-form-bg" style="padding: 0px 5px 0px 5px;">
+                                <div class="input-control text full-size">
+                                    <input id="ContactName{{name.UserId}}" type="text"  ng-model="ContactName"  ng-change = "ContactNameValidation" placeholder="Contact Name" ng-class="{true: 'errorContact'}[errorMessage]" required>
+                                    <span id="errMsg" class="error_Message" ng-show="errorMessage">Contact name is required.</span>
+                                </div>
+                                <div class="margin4">
+                                    @*<a href="#" ng-click="addContactName()" onclick="return false" ng-class="{true: 'disablePage'}[ContactDisabled]"><img src="/images/generic-tick-small-accent@2x.png">Add</a>&nbsp;*@
+                                    <a href="#" ng-click="cancelContactName()" onclick="return false"><img src="/images/generic-cross-12px-gray@2x.png" alt="cancel-icon"> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-role="dialog" id="dialogDeleteRoleUser" class="padding20 dialog deletePageModal styleDialogTenantAdmin">
+                            <h1 class="modalFont">Are you sure you want to delete the role contact?</h1>
+                            <div class="place-right marginTop50">
+                                <button class="pageDeleteConfirm button bt-next modalMargin" onclick="return true">Yes</button>
+                                <button class="button modalCancel modalMargin" onclick="return false">No</button>
+                            </div>
+                            <span class="dialog-close-button"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row padding20" ng-show="showRoleSaveAndCancel">
+                    <div class="place-right padding20" style="padding-right: 120px;">
+                        <button class="button bt-next saveQuestions" ng-click="addContactName()">Save</button>
+                        <button class="button bt-blue saveQuestions" ng-click="cancelRoleDetails()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <div  id="audienceTab" class="row cells12 padding10 no-padding-left"  ng-controller="audienceController" style="display: none;">
+                    <div class="cell colspan2 width20 right-border-grey min-height-400">
+                        <div class="row cell3">
+                            <div class="row cells3 margin20 padding10 no-padding-bottom no-padding-top">
+                                <h2 class="fg-black place-left clearLeft txtFont row cells3 padding10 no-padding-bottom">
+                                    Type
+                                    <span ng-click="!editInProgress  && showAddAudiencTypePanel()" class="add-group-icon no-padding-top">
+                                        <img src="~/images/generic-plus-circle-accent.png" />
+                                    </span>
+                                </h2>
+                            </div>
+                            <div id="typeList" class="listview">
+                                <div class="tenantListHeight">
+                                    <div id="typeList{{type.AudienceTypeId}}" data-name="{{type.AudienceTypeName}}" class="list-tab" ng-repeat="type in types" ng-click="showTenantUsersAndPermissions(type.AudienceTypeId)" ng-mouseover="showTypeEditPanel(type.AudienceTypeId,type.AudienceTypeName,$event)" ng-mouseout="hideTypeEditPanel(type.AudienceTypeId)">
+                                        <div id="displayTypePanel{{type.AudienceTypeId}}">
+                                            <a href="#" ng-click="loadSubTypeByTypeId(type.AudienceTypeId, type.AudienceTypeName, $event);"><span class="list-title">{{type.AudienceTypeName}}</span></a>
+                                            <div style="width:40px; float:right">
+                                                <span id="editType{{type.AudienceTypeId}}" class="eGroup ms-Icon ms-Icon--pencil ms-icon-inherit14" ng-click="!editInProgress  && editType(type.AudienceTypeId,type.AudienceTypeName,$event);$event.stopPropagation();"></span>
+                                                <span id="deleteType{{type.AudienceTypeId}}" class="dGroup ms-Icon ms-Icon--trash ms-icon-red15" ng-click="deleteType(type.AudienceTypeId,type.AudienceTypeName);$event.stopPropagation();"></span>
+                                            </div>
+                                        </div>
+                                        <div id="editTypePanel{{type.AudienceTypeId}}" class="editGroupPanel">
+                                            <div>
+                                                <input id="t{{type.AudienceTypeId}}" type="text" ng-model="type.AudienceTypeName" ng-click="$event.stopPropagation()" required>
+                                                <span class="error_Message">Type is required.</span>
+                                            </div>
+                                            <div>
+                                                <a href="#" ng-click="updateType(type, $event);" onclick="return false"><img src="/images/generic-tick-small-accent@2x.png">Save</a>&nbsp;
+                                                <a href="#" ng-click="closeTypeEdit(type.AudienceTypeId, type.AudienceTypeName);$event.stopPropagation();" onclick="return false"><img src="/images/generic-cross-12px-gray@2x.png" alt="cancel-icon">Cancel</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row padding20 no-padding-right cells4" id="addTypePanel" ng-show="createType">
+                                <div class="group-form-bg" style="padding: 0px 5px 0px 5px;">
+                                    <div class="input-control text full-size input-type-left-right-padding5">
+                                        <input id="AudienceTypeName" type="text" ng-model="AudienceTypeName" placeholder="Type" ng-change="TypeNameValidation()" ng-class="{true: 'errorType'}[errorMessage]" required>
+                                        <div class="errMsg dispInline" ng-show="errorMessage">Enter a valid name.</div>
+                                    </div>
+                                    <div class="margin4">
+                                        <a href="#" ng-click="addAudienceType()" onclick="return false" ng-class="{true: 'disablePage'}[TypeDisabled]"><img src="/images/generic-tick-small-accent@2x.png">Add</a>&nbsp;
+                                        <a href="#" ng-click="cancelAudienceType()" onclick="return false"><img src="/images/generic-cross-12px-gray@2x.png" alt="cancel-icon"> Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-role="dialog" id="dialogDeleteType" class="padding20 dialog deletePageModal" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px; border:2px solid gray;">
+                                     <h1 class="modalFont">Are you sure you want to delete the Type?</h1>
+                                    <div class="place-right marginTop50">
+                                        <button class="pageDeleteConfirm button bt-next modalMargin" onclick="return true">Yes</button>
+                                        <button class="button modalCancel modalMargin" onclick="return false">No</button>
+                                    </div>
+                                    <span class="dialog-close-button"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cell colspan2 width20 right-border-grey min-height-400">
+                        <div class="row cell3">
+                            <div class="row cells3 margin20 padding10 no-padding-bottom no-padding-top">
+                                <h2 class="fg-black place-left clearLeft txtFont row cells3 padding10 no-padding-bottom">
+                                    Sub-type
+                                    <span ng-click="showAddSubTypePannel()" class="add-group-icon no-padding-top">
+                                        <img src="~/images/generic-plus-circle-accent.png" />
+                                    </span>
+                                </h2>
+                            </div>
+                            <div class="listview" id="userList">
+                                <div id="SubTypeList{{subtype.AudienceSubTypeId}}" class="list-tab" ng-repeat="subtype in subtypes" ng-mouseover="showSubTypeEditPanel(subtype.AudienceSubTypeId,subtype.AudienceSubTypeName,$event)" ng-mouseout="hideSubTypeEditPanel(subtype.AudienceSubTypeId)">
+                                    <span class="list-title">{{subtype.AudienceSubTypeName}}</span>
+                                    <div style="width:40px; float:right">
+                                        <span id="editSubType{{subtype.AudienceSubTypeId}}" class="eGroup ms-Icon ms-Icon--pencil ms-icon-inherit14" ng-click="editSubType(subtype.AudienceSubTypeId,subtype.AudienceSubTypeName,$event);$event.stopPropagation();"></span>
+                                        <span id="deleteSubType{{subtype.AudienceSubTypeId}}" class="dGroup ms-Icon ms-Icon--trash ms-icon-red15" ng-click="deleteSubType(subtype.AudienceSubTypeId,subtype.AudienceSubTypeName);$event.stopPropagation();"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row cells4" id="addSubTypePanel" ng-show="createSubType">
+                                <div class="group-form-bg" style="padding: 0px 5px 0px 5px;">
+                                    <div class="input-control text full-size input-type-left-right-padding5">
+                                        <input id="SubTypeName" type="text" ng-model="subtype.SubTypeName" placeholder="Sub Type" ng-change="adminEmailValidation()" ng-class="{true: 'errorGroup'}">
+                                        <div class="errMsg dispInline" ng-show="errorMessage_User">Enter a valid Sub-type.</div>
+                                    </div>
+                                    <div class="margin4">
+                                        @*<span id="errorTitle" class="error_Message">Tenant name is required.</span>*@
+                                        <a href="#" ng-click="addAudienceSubType()" onclick="return false"><img src="/images/generic-tick-small-accent@2x.png">Add</a>&nbsp;
+                                        <a href="#" ng-click="cancelAudienceSubType()" onclick="return false"><img src="/images/generic-cross-12px-gray@2x.png" alt="cancel-icon"> Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div data-role="dialog" id="dialogDeleteTenantAdmin" class="padding20 dialog deletePageModal styleDialogTenantAdmin">
+                                <h1 class="modalFont">Are you sure you want to delete the Tenant admin?</h1>
+                                <div class="place-right marginTop50">
+                                    <button class="pageDeleteConfirm button bt-next modalMargin" onclick="return true">Yes</button>
+                                    <button class="button modalCancel modalMargin" onclick="return false">No</button>
+                                </div>
+                                <span class="dialog-close-button"></span>
+                            </div>*@
+                        </div>
+                    </div>
+                        @*<div class="place-right padding20" style="padding-right:120px">
+                            <button class="button bt-next saveQuestions" ng-click="saveAudienceDetails()">Save</button>
+                            <button class="button bt-blue saveQuestions" ng-click="cancelTenantDetails()">Cancel</button>
+                        </div>*@
+                    </div>
+         </div>
+            <div class="row cells12 frame" id="riskScores" style="display:none">
+                <div>
+                    <h1>about</h1>
+                </div>
+            </div>
+        </div>
+        @*<div class="rows cells12 padding20">
+                <button class="button bt-next" ng-click="saveSystemSettings()">Save</button>
+                <button class="button bt-blue">Cancel</button>
+            </div>*@
+    </div>
+</div>
+<div data-role="dialog" id="dialogGroupDeleted" class="padding20 dialog success" data-close-button="true" data-type="success" style="width: auto; height: auto; visibility: hidden; left: 546px; top: 422px;">
+    <h1>Success</h1>
+    <p>
+        The group was deleted successfully.
+    </p>
+    <span class="dialog-close-button"></span>
+</div>
+
+<div data-role="dialog" id="dialogUserDeleted" class="padding20 dialog success" data-close-button="true" data-type="success" style="width: auto; height: auto; visibility: hidden; left: 546px; top: 422px;">
+    <h1>Success</h1>
+    <p>
+        The user was removed from the group successfully.
+    </p>
+    <span class="dialog-close-button"></span>
+</div>
+
+<div data-role="dialog" id="dialogGroupSaved" class="padding20 dialog success" data-close-button="true" data-type="success" style="width: auto; height: auto; visibility: hidden; left: 546px; top: 422px;">
+    <h1>Success</h1>
+    <p>
+        The group was saved successfully.
+    </p>
+    <span class="dialog-close-button"></span>
+</div>

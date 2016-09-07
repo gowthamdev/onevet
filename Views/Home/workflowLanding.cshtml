@@ -1,0 +1,169 @@
+﻿@{
+    Layout = null;
+}
+
+<div ng-controller="workflowLandingController">
+
+    <div class="row cells12" style="display: none">
+        <div class="place-left padding20">
+            <a href="#permissions" class="active">Permissions</a>
+        </div>
+    </div>
+
+    <div class="row cells12">
+        <div class="tabcontrol">
+            <ul class="tabs">
+                <li class="tabPointer"><a ng-click="redirectToAdmin()">Questionnaires</a></li>
+                <li class="active-tab tabPointer"><a ng-click="redirectToWorkFlowLanding()">Workflows</a></li>
+                <li class="tabPointer"><a ng-click="redirectToSystemSettings()">System Settings</a></li>
+            </ul>
+        </div>
+
+
+
+    </div>
+
+    <div class="row cells12">
+        <div class="place-left padding20 paddingHeading width80">
+            <div class="row">
+                <div class="cell">
+                    <h2 class="fg-black no-margin place-left txtFont myquestionnaires headingClass">Workflows</h2>
+                    <ul class="questionList padding20 no-padding-left place-left clearLeft paddingHeading">
+                        <li><a id="myWorkFlow" class="active" ng-click="changeClass('#myWorkFlow')">My workflows</a></li>
+                        <li><a id="allWorkFlow" class="fg-lightgray" ng-click="changeClass('#allWorkFlow')">All</a></li>
+                        <li><a id="deletedWorkFlow" class="fg-lightgray" ng-click="changeClass('#deletedWorkFlow')">Deleted</a></li>
+                    </ul>
+                    </div>
+            </div>
+
+            <div class="row cells2">
+                <div class="cell"><button class="button primary margin10 no-margin-left place-left clearLeft placeholder_font questionnaire-button" ng-click="reDirectToNewWorkflow()">New workflow</button></div>
+                <div class="cell">
+                    <div class="place-right padding10 no-padding-bottom search_bar marginSearch">
+                        <div class="tab-group-content place-right search_input margin8">
+                            <div class="input-control text no-margin">
+                                <input id="workFlowTableSearchText" size="58" type="text" class="textInput searchDataTab" ng-keypress="onFolderNumberKeyPress($event)">
+                                <button id="dataTableSearch" class="button search_btn" ng-click="searchDataTable()">
+                                    <span class="mif-search"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--
+                    <button class="button primary margin20 no-margin-left place-left clearLeft placeholder_font questionnaire-button" ng-click="reDirectToNewWorkflow()">New workflow</button>
+                    <div class="place-right cell colspan6 padding20 no-padding-bottom search_bar marginSearch">
+                        <div class="tab-group-content place-right search_input">
+                            <div class="input-control text no-margin">
+                                <input id="workFlowTableSearchText" size="58" type="text" class="textInput searchDataTab" ng-keypress="onFolderNumberKeyPress($event)">
+                                <button id="dataTableSearch" class="button search_btn" ng-click="searchDataTable()">
+                                    <span class="mif-search"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+    -->
+                </div>
+                <div class="row cells12">
+
+                    <div class="cell colspan9 padding20 no-padding-top">
+                        <div class="desktop-view">
+
+                        </div>
+                        <!-- data table for desktop -->
+                        <table id="workFlowTable" class="dataTables_scrollHead desktop-view" style="width: 100%; display: none">
+                            <thead>
+                                <tr>
+                                    <th class="tableFont">Title</th>
+                                    <th class="tableFont">Tenant</th>
+                                    <th class="tableFont">Used by</th>
+                                    <th id="workFlowDateModified" class="tableFont">Date modified</th>
+                                    <th class="tableFont">Deleted by</th>
+                                    <th class="tableFont">Modified by</th>
+                                    <th class="tableFont">Status</th>
+                                    <th class="tableFont">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <!-- data table for mobile -->
+                        @*<table id="adminTablemobile" class="mobile-view width100">
+                            <thead>
+                                <tr>
+                                    <th class="">Questionnaire</th>
+                                    <th class="myheadermobileth">Active</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>*@
+
+                    </div>
+                    <!-- filters for desktop -->
+                    <div class="cell colspan3 padding20 desktop-view borderLeftWorkFlowLanding">
+                        <h2 class="fg-black no-margin place-left clearLeft txtFont">Filters</h2>
+
+                        <p ng-show="showActiveInActiveFilters" class="place-left clearLeft filterHeading">Status</p>
+                        <label class="input-control checkbox place-left clearLeft checkBoxMargin" ng-show="showActiveInActiveFilters">
+                            <input id="activeWorkFlow" type="checkbox" ng-click="filterme()" name="type" value="1" />
+                            <span class="check smallCheckbox"></span>
+                            <span class="caption filterClass">Active</span>
+                        </label>
+                        <label disp class="input-control checkbox place-left clearLeft" ng-show="showActiveInActiveFilters">
+                            <input id="inactiveWorkFlow" type="checkbox" ng-click="filterme()" name="type" value="0" />
+                            <span class="check smallCheckbox"></span>
+                            <span class="caption filterClass">Inactive</span>
+                        </label>
+                        <p id="datesLabel" class="place-left clearLeft filterHeading filterMargin">Date Modified</p>
+                        <div class="input-control text place-left clearLeft" id="datepicker_from_workflow">
+                            <input type="text" placeholder="From" class="dateBorder">
+                            <button class="button dateBorder"><span class="mif-calendar"></span></button>
+                        </div>
+
+
+                        <div class="input-control text place-left clearLeft" id="datepicker_to_workflow">
+                            <input type="text" placeholder="To" class="dateBorder" id="datePickerToWorkFlow">
+                            <button class="button dateBorder"><span class="mif-calendar"></span></button>
+                        </div>
+                        <div id="errorDateDiv_workFlow" class="input-control text place-left clearLeft"><span style="display: none; margin-top: 3px;" class="error_Message" id="errorDate_workFlow">From date cannot be greater than to date</span></div>
+                        <p id="tenantLabel_WF" style="margin-top: 0px;" class="place-left clearLeft filterHeading filterMargin">Tenant</p>
+                        <div id="tenantDiv_WF" class="input-control text place-left clearLeft" style="width: 200px" data-role="select">
+                            <select style="width: 200px" id="selectTenant_WF" ng-model="selectedTenant" ng-options="item.TenantId as item.TenantName for item in tenants" ng-change="SetSelectTemplate()">
+                                <option></option>
+                            </select>
+                        </div>
+                        <div style="margin-top: 20px" class="input-control text place-left clearLeft">
+                            <a href="" ng-click="fnClearFilters()">
+                                <img src="/images/generic-cross-12px-accent@2x.png">
+                                <span>Clear Filters</span>
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div data-role="dialog" id="dialogWorkflowDelete" class="padding20 dialog deletePageModal" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px;">
+                <h1 class="modalFont">Do you want to delete the workflow? This action is not undoable.</h1>
+                <div class="place-right marginTop50">
+                    <button class="pageDeleteConfirm button workFlowDeleteBtn modalMargin" onclick="fnDeleteWorkFlow(id)">Delete anyway</button>
+
+                    <button class="button workFlowCancelBtn modalMargin" onclick="hideMetroDialog(event)">Don't delete</button>
+                </div>
+            </div>
+
+    <div data-role="dialog" id="dialogWorkflowStatus" class="padding20 dialog deletePageModal" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px;">
+        <h1 class="modalFont">Do you want to change the status of the workflow?</h1>
+        <div class="place-right marginTop50">
+            <button class="pageDeleteConfirm button workFlowDeleteBtn modalMargin" onclick="fnChangeStatus(id,status)">Yes</button>
+
+            <button class="button workFlowCancelBtn modalMargin" onclick="resetStatus(event)">No</button>
+        </div>
+        
+    </div>
+
+
+        </div>
+
+
+

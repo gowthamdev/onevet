@@ -1,0 +1,352 @@
+@{
+    Layout = null;
+}
+
+<div ng-controller="adminController">
+
+    <div class="row cells12" style="display: none">
+        <div class="place-left padding20">
+            <a href="#permissions" class="active">Permissions</a>
+        </div>
+    </div>
+
+
+
+    <div class="row cells12">
+        <div class="tabcontrol">
+            <ul class="tabs">
+
+                <li class="active-tab tabPointer"><a ng-click="redirectToAdmin()">Questionnaires</a></li>
+                <li class="tabPointer"><a ng-click="redirectToWorkFlowLanding()">Workflows</a></li>
+                <li class="tabPointer"><a ng-click="redirectToSystemSettings()">System Settings</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row cells12">
+        <div class="place-left padding20 paddingHeading width80">
+
+            <div class="row">
+                <div class="cell">
+                    <h2 class="fg-black no-margin place-left txtFont myquestionnaires headingClass">Questionnaires</h2>
+                    <ul class="questionList padding20 no-padding-left place-left clearLeft paddingHeading">
+                        <li><a id="myQuestionnaire" class="active" ng-click="changeClass('#myQuestionnaire')">My Questionnaries</a></li>
+                        <li><a id="allQuestionnaire" class="fg-lightgray" ng-click="changeClass('#allQuestionnaire')">All</a></li>
+                        <li><a id="deletedQuestionnaire" class="fg-lightgray" ng-click="changeClass('#deletedQuestionnaire')">Deleted</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row cells2">
+                <div class="cell"><button class="button primary margin10 no-margin-left place-left clearLeft placeholder_font questionnaire-button" ng-click="reDirectToNewQuestionnaire()">New Questionnaire</button></div>
+                <div class="cell">
+                    <div class="place-right padding10 no-padding-bottom search_bar marginSearch">
+                        <div class="tab-group-content place-right search_input margin8">
+                            <div class="input-control text no-margin">
+                                <input id="dataTableSearchText" size="58" type="text" class="textInput searchDataTab" ng-keypress="onFolderNumberKeyPress($event)">
+                                <button id="dataTableSearch" class="button search_btn" ng-click="searchDataTable()">
+                                    <span class="mif-search"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--
+            <button class="button primary margin20 no-margin-left place-left clearLeft placeholder_font questionnaire-button" ng-click="reDirectToNewQuestionnaire()">New Questionnaire</button>
+            <div class="place-right cell colspan6 padding20 no-padding-bottom search_bar marginSearch">
+                <div class="tab-group-content place-right search_input">
+                    <div class="input-control text no-margin">
+                        <input id="dataTableSearchText" size="58" type="text" class="textInput searchDataTab" ng-keypress="onFolderNumberKeyPress($event)">
+                        <button id="dataTableSearch" class="button search_btn" ng-click="searchDataTable()">
+                            <span class="mif-search"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+    -->
+
+        </div>
+        <div class="row cells12">
+
+            <div class="cell colspan9 padding20 no-padding-top">
+                <div class="desktop-view">
+                    @*Toggle column: <a class="toggle-vis" data-column="0">Questionnaire name-</a>
+                        <a id="tenant" class="toggle-vis" data-column="1">Tenant-</a>
+                        <a class="toggle-vis" data-column="2">Date created-</a>
+                        <a class="toggle-vis" data-column="3">Used by-</a>
+                        <a class="toggle-vis" data-column="4">Version-</a>
+                        <a id="activeQuestionnaire" class="toggle-vis" data-column="5">Active-</a>
+                        <a id="actions" class="toggle-vis" data-column="6">Actions</a>*@
+                </div>
+                <!-- data table for desktop -->
+                <table id="adminTable" class="desktop-view" style="width: 100%; display: none">
+                    <thead>
+                        <tr>
+                            <th class="tableFont">Name</th>
+                            <th class="tableFont">Tenant</th>
+                            <th id="dateModified" class="tableFont">Date modified</th>
+                            <th class="tableFont">Used by</th>
+                            <th class="tableFont">Deleted by</th>
+                            <th class="tableFont">Version</th>
+                            <th class="tableFont">Status</th>
+                            <th class="tableFont">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <!-- data table for mobile -->
+                <table id="adminTablemobile" class="mobile-view width100">
+                    <thead>
+                        <tr>
+                            <th class="">Questionnaire</th>
+                            <th class="myheadermobileth">Active</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+            </div>
+            <!-- filters for desktop -->
+            <div class="cell colspan3 padding20 desktop-view borderLeft">
+                <h2 class="fg-black no-margin place-left clearLeft txtFont">Filters</h2>
+
+                <p ng-show="showActiveInActiveFilters" class="place-left clearLeft filterHeading">Status</p>
+                <label class="input-control checkbox place-left clearLeft checkBoxMargin" ng-show="showActiveInActiveFilters">
+                    <input id="activeQuestionnaire" type="checkbox" ng-click="filterme()" name="type" value="1" />
+                    <span class="check smallCheckbox"></span>
+                    <span class="caption filterClass">Active</span>
+                </label>
+                <label disp class="input-control checkbox place-left clearLeft" ng-show="showActiveInActiveFilters">
+                    <input id="inactiveQuestionnaire" type="checkbox" ng-click="filterme()" name="type" value="0" />
+                    <span class="check smallCheckbox"></span>
+                    <span class="caption filterClass">Inactive</span>
+                </label>
+                <p class="place-left clearLeft filterHeading filterMargin">Date Modified</p>
+                <div class="input-control text place-left clearLeft" id="datepicker_from">
+                    <input type="text" placeholder="From" class="dateBorder">
+                    <button class="button dateBorder"><span class="mif-calendar"></span></button>
+                </div>
+
+
+                <div class="input-control text place-left clearLeft" id="datepicker_to">
+                    <input type="text" placeholder="To" class="dateBorder" id="datePickerTo">
+                    <button class="button dateBorder"><span class="mif-calendar"></span></button>
+                </div>
+                <div id="errorDateDiv" class="input-control text place-left clearLeft"><span style="display: none; margin-top: 3px;" class="error_Message" id="errorDate">From date cannot be greater than to date</span></div>
+                <p id="tenantLabel" style="margin-top: 0px;" class="place-left clearLeft filterHeading filterMargin">Tenant</p>
+                <div id="tenantDiv" class="input-control text place-left clearLeft" style="width: 200px" data-role="select">
+                    <select style="width: 200px" id="selectTenant" ng-model="selectedTenant" ng-options="item.TenantId as item.TenantName for item in tenants" ng-change="SetSelectTenant()">
+                        <option></option>
+                    </select>
+                </div>
+                <div style="margin-top: 20px" class="input-control text place-left clearLeft">
+                    <a href="" ng-click="fnClearFilters()">
+                        <img src="/images/generic-cross-12px-accent@2x.png">
+                        <span>Clear Filters</span>
+                    </a>
+                </div>
+                @*<div class="input-control margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft" data-role="select" style="width: 50%">
+                                <select id="select">
+                                    <option>Yaiton Ngo</option>
+
+                    </select>
+
+                            </div>*@
+            </div>
+            <!-- filters for mobile view-->
+
+            <div class="cell colspan4 padding20 mobile-view dropup-filter" id="dropup-filter">
+                <h2 id="filters" class="no-margin padding10 no-padding-left no-padding-right filterFont">Filters</h2>
+                <label class="input-control checkbox place-left clearLeft">
+                    <input id="useRecord" ng-click="filterme()" type="checkbox" name="free">
+                    <span class="check"></span>
+                    <span class="caption">In use</span>
+                </label>
+                <label class="input-control checkbox place-left clearLeft">
+                    <input type="checkbox" ng-click="filterme()" name="free" value="0 requests">
+                    <span class="check"></span>
+                    <span class="caption">Not in use</span>
+                </label>
+                <p class="place-left clearLeft">Status</p>
+                <label class="input-control checkbox place-left clearLeft">
+                    <input type="checkbox" ng-click="filterme()" name="type" value="1">
+                    <span class="check"></span>
+                    <span class="caption">Active</span>
+                </label>
+                <label class="input-control checkbox place-left clearLeft">
+                    <input type="checkbox" ng-click="filterme()" name="type" value="0">
+                    <span class="check"></span>
+                    <span class="caption">Not active</span>
+                </label>
+                <p class="place-left clearLeft">Date Created</p>
+                <div class="input-control text place-left clearLeft" id="datepicker_from">
+                    <input type="text" placeholder="From">
+                    <button class="button"><span class="mif-calendar"></span></button>
+                </div>
+                <div class="input-control text place-left clearLeft" id="datepicker_to">
+                    <input type="text" placeholder="To">
+                    <button class="button"><span class="mif-calendar"></span></button>
+                </div>
+                <!--<div class="input-control margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft" data-role="select" style="width: 50%">
+                        <select id="select">
+                            <option>Yaiton Ngo</option>
+
+                </select>
+                    </div>-->
+            </div> <!-- dropup end -->
+        </div>
+    </div>
+
+
+
+    <div data-role="dialog" id="dialogPreviewQuestionnaire" class="padding1 dialog" data-close-button="false" data-overlay-color="op-dark" data-width="80%" data-height="90%" data-overlay="true" preview-links-open-new-window>
+
+        <div class="previewBack" onclick="hideMetroDialogDiv('#dialogPreviewQuestionnaire'); destroyWizard('#previewWizard');">
+            <img src="/images/generic-back-arrow-white.svg" width="15" height="15" alt="Back" /> &nbsp;Questionnaire preview
+        </div>
+
+        <div class="row cell txtHeading desktop-view previewOnly">
+            <div class="cell align-center">
+                This is a preview. Questionnaire answers won't be saved.
+            </div>
+        </div>
+
+        <div class="row cells2 txtHeading desktop-view previewLogoLine">
+            <div class="cell">
+                OneVet
+            </div>
+            <div class="cell align-right">
+                <img src="/images/microsoft-logo.svg" alt="Microsoft logo" width="84" height="27" />
+            </div>
+        </div>
+
+        <div class="row cells4 bg-blueWhite text-enlarged previewHeading desktop-view">
+            <div class="previewHeadingLeft cell colspan3">
+                {{questionnaireName}}
+            </div>
+            <div class="previewHeadingRight cell">
+                <div>{{questionnairePreviewPercentageComplete}}% completed</div>
+                <div class="answers">Page {{questionnairePreviewCurrentPageNumber}}/{{questionnairePreviewPageCount}}</div>
+            </div>
+        </div>
+
+        <div class="previewMain">
+
+            <div class="previewWelcome">
+                <div class="previewIntro" ng-bind-html="renderHtml(questionnaireIntro)"></div>
+                <button class="bt-next btn-next" ng-click="goToWizard($event)">Continue</button>
+            </div>
+
+            <div class="wizard" id="previewWizard" data-stepper-type="cycle" data-buttons='{"next": {"show": true, "title": "Next", "cls": "bt-next", "group": "right"}, "prior": {"show": true, "title": "Previous", "cls": "bt-next", "group": "left"}, "cancel": {"show": false}, "help": {"show": false}, "finish": {"show": true, "title": "Submit", "cls": "bt-next", "group": "right"}}'>
+
+                <div class="steps">
+
+
+                    <div class="step" ng-repeat="page in questionnairePreviewPages" fin-preview-pages-load>
+                        <h1>{{page.PageTitle}}</h1>
+
+                        <div class="row small" ng-show="page.PageIntro" ng-bind-html="renderHtml(page.PageIntro)"></div>
+
+                        <div class="row cells12" id="question{{question.QuestionVersionId}}" ng-repeat="question in questionResult" fin-preview-questions-load>
+
+                            <div class="cell" ng-class="{'width25' : (question.DisplayOrder.toString().indexOf('.')==-1),'width45 questionHide' : (question.DisplayOrder.toString().indexOf('.')!=-1 && !question.IsRequired),'width45' : (question.DisplayOrder.toString().indexOf('.')!=-1  && question.IsRequired)}">
+                                <h2>{{question.DisplayOrder}}</h2>
+                            </div>
+                            <div class="cell" ng-class="{'colspan11' : (question.DisplayOrder.toString().indexOf('.')==-1),'colspan10 questionHide' : (question.DisplayOrder.toString().indexOf('.')!=-1  && !question.IsRequired),'colspan10' : (question.DisplayOrder.toString().indexOf('.')!=-1  && question.IsRequired)}">
+                                <h2>{{question.QuestionText}} <span data-role="hint" data-hint-color="fg-white" data-hint-mode="2" data-hint-position="right" data-hint-background="#0078d6" data-hint="{{question.QuestionHelpText}}"><img src="/images/generic-input-help.svg" class="hintQuestionMark" width="15" height="15" /></span></h2>
+                                <div class="row small" ng-show="question.QuestionContent" ng-bind-html="renderHtml(question.QuestionContent)"></div>
+
+                                <div class="input-control textarea ctlMargin" ng-if="question.AnswerType == 'Free Text'">
+                                    <textarea id="{{question.QuestionVersionId}}" name="{{question.QuestionVersionId}}" class="txtAreaWidth"></textarea>
+                                </div>
+
+                                <div ng-if="question.AnswerType == 'Single Choice'" class="ctlMargin">
+                                    <div ng-repeat="option in question.QuestionsOptionPreview">
+                                        <label class="input-control radio small-check" ng-click="showChildQuestionsSingleChoice(option.BranchingQuestionIds, question.QuestionVersionId)" ng-if="option.OptionText!='ISREQUIRED'">
+                                            <input type="radio" value="{{option.OptionText}}" id="{{question.QuestionVersionId}}" name="{{question.QuestionVersionId}}" branchingQuestion="{{option.BranchingQuestionIds}}" weight="{{option.OptionWeight}}" />
+                                            <span class="check"></span>
+                                            <span class="caption">{{option.OptionText}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div ng-if="question.AnswerType == 'Multiple Choice'" class="ctlMargin">
+                                    <div ng-repeat="option in question.QuestionsOptionPreview" ng-click="showChildQuestionsMultipleChoice(question.ChildQuestionGroups, question.QuestionVersionId)">
+                                        <label class="input-control checkbox small-check" ng-if="option.OptionText!='ISREQUIRED'">
+                                            <input type="checkbox" value="{{option.OptionId}}" id="{{question.QuestionVersionId}}" name="{{question.QuestionVersionId}}" branchingQuestion="{{option.BranchingQuestionIds}}" weight="{{option.OptionWeight}}" />
+                                            <span class="check"></span>
+                                            <span class="caption">{{option.OptionText}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div ng-if="question.AnswerType == 'Attachment'" class="row cells3 ctlMargin">
+                                    <div class="cell">
+
+                                        <div class="input-control file full-size topMargin" data-role="input">
+                                            <label>File</label>
+                                            <input type="file" id="{{question.QuestionVersionId}}">
+                                            <button class="button"><span class="mif-folder"></span></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div ng-if="question.AnswerType == 'Data List'" class="row cells3 ctlMargin">
+                                    <div ng-controller="previewQuestionnaireDataList">
+                                        <div ng-repeat="entry in dataListEntries" class="dataListDisplay row cells12">
+                                            <div class="cell colspan10">
+                                                <div></div>
+                                                <div ng-repeat="field in entry.fields">
+                                                    <div ng-repeat="(key, value) in field" class="padding5">
+                                                        {{value}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="cell colspan2">
+                                                <!--<a ng-click="removeEntry($index)">Edit</a> &nbsp;--><a ng-click="removeEntry($index)">Delete</a>
+                                            </div>
+                                        </div>
+
+                                        <div ng-repeat="option in question.QuestionOptions" class="row cells2 topMargin">
+                                            <div class="cell">
+                                                <label>{{option.OptionText}}</label>
+                                                <div class="input-control text full-size">
+                                                    <input type="text" id="{{option.OptionId}}" ng-model="dataListEntry.datalistFields[$index]">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="datalistAddBtn">
+                                            <a ng-click="saveDataList()"><img src="/images/generic-plus-circle.svg" width="35" height="35" /> &nbsp;Add</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="previewBye">
+                <div class="previewFinish" ng-bind-html="renderHtml(questionnaireThankYou)"></div>
+                <button class="bt-next btn-next" onclick="hideMetroDialogDiv('#dialogPreviewQuestionnaire'); destroyWizard('#previewWizard');">Finish</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $(document).keydown(function (e) {
+        // hide dailog if ESCAPE key pressed
+        if (e.keyCode === 27) {
+            hideMetroDialogDiv('#dialogPreviewQuestionnaire');
+            destroyWizard('#previewWizard');
+        }
+    });
+</script>

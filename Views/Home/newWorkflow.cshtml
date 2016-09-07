@@ -1,0 +1,95 @@
+@{
+    Layout = null;
+}
+<div>
+<div class="row cells12">
+    <div class="tabcontrol">
+        <ul class="tabs">
+            <li><a href="#/admin">Questionnaires</a></li>
+            <li class="active-tab"><a href="#/workflowLanding">Workflows</a></li>
+            <li><a href="#/systemsettings">System Settings</a></li>
+        </ul>
+    </div>
+</div>
+  <div class="row row cells12">
+  <div class="row padding20">
+      <div class="place-left width100">
+		   <h2 class="fg-black no-margin place-left txtFont headingClass">{{workflowHeader}}</h2>
+		   <p class="place-left clearLeft settings">1. Settings</p>
+      </div>
+  </div>
+	<div>
+		<form name="workflowForm">
+			 <div class="row padding20 cells4 inputPaddingClass">
+				<div class="cell">
+				<label>Workflow Title</label>
+					<div class="input-control text full-size">
+                        <input name="title" ng-change="changeTitle()" ng-blur="checkTitle()" id="title" type="text" ng-model="workflowName" class="inputBorder" required maxlength="254">
+                        <span style="margin-left: 0%" id="errorTitle" class="error_title_Message" ng-show="invalidTitle">Workflow title is required</span>
+                        <span style="margin-left: 0%" id="errorNonEngTitle22" class="error_title_Message" ng-show="isNonEnglishTitle">Non English characters are not allowed</span>
+					</div>
+				</div>
+			</div>
+            <div class="row padding20 cells4 inputPaddingClass">
+                <div class="cell">
+                    <label>Description</label>
+                    <div class="input-control text full-size">
+                        <textarea class="inputBorder" required ng-model="desco" ng-blur="checkDescription()" ng-change="changeDesc()"></textarea>
+                        <span style="margin-left: 0%" id="errorDesc" class="error_title_Message" ng-show="invalidDesciption">Workflow Description is required</span>
+                    </div>
+                </div>
+            </div>
+                <div class="row padding20 inputPaddingClass" style="padding-top: 80px">
+                    <div class="place-left" style="width: 26%;" >
+                        <span class="place-left clearLeft">Fiscal Year</span>
+                        <select id="fiscalYear" multiple="multiple" class="fiscal margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft widthm100">
+
+                        </select>
+                    </div>
+                </div>
+            
+                <div class="padding20 row inputPaddingClass" style="margin-top: -2%">
+                    <div style="width: 20%;" clas="place-left">
+                        <span id="errorFiscalyear" class="error_Message">Please select fiscal year</span>
+                    </div>
+                </div>
+
+                <div class="row padding20 inputPaddingClass">
+                    <div class="place-left" style="width: 26%;">
+                        <span class="place-left clearLeft">Area</span>
+                        <select id="area" multiple="multiple" class="area margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft widthm100"></select>
+                    </div>
+                    @* <div style="display: none" class="place-left width20">
+                    <span class="place-left clearLeft">Subsidiary</span>
+                    <div id="subsidiary" class="input-control margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft widthm100" data-role="select">
+                        <select id="selectSubsidiary" ng-model="selectedSubsidiary" ng-options="item.SubsidiaryId as item.SubsidiaryText for item in subsdiaries" ng-change="SetSelectSubsidiary()">
+                            <option value="">All</option>
+                        </select>
+                        <span id="errorSubsidiary" class="error_Message">Please select Subsidiary</span>
+                    </div>
+                </div>*@
+
+                    <div class="place-left" style="width: 26%;">
+                        <span class="place-left clearLeft">Country</span>
+                        <select id="country" multiple="multiple" class="country margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft widthm100"></select>
+                    </div>
+                </div>
+                <div class="padding20 row inputPaddingClass" style="margin-top: -1%">
+                    <div class="errorDiv place-left width20" style="width:26% !important">
+                        <span id="errorArea" class="error_Message">Please select Area</span>
+                    </div>
+                    <div class="errorDiv place-left width20">
+                        <span id="errorCountry" class="error_Message">Please select at least one country</span>
+                    </div>
+                </div>
+
+
+</form>
+        <div class="rows cells12 padding20">
+            <button class="button bt-next" ng-click="goToNext()">Next</button>
+            <div class="place-right">
+                <button class="button bt-blue" ng-click="redirectWithoutSave()">Cancel</button>
+                <button class="button bt-blue saveQuestions" ng-click="saveWorkFlowAndRediect()">Save As Draft</button>
+            </div>
+        </div>
+</div>

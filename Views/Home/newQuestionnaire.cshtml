@@ -1,0 +1,195 @@
+@{
+    Layout = null;
+}
+<div class="row cells12">
+    <div class="tabcontrol">
+        <ul class="tabs">
+            <li class="active-tab"><a href="#/admin">Questionnaires</a></li>
+            <li><a href="#/workflowLanding">Workflows</a></li>
+            <li><a href="#/systemsettings">System Settings</a></li>
+        </ul>
+    </div>
+</div>
+<div class="row cells12">
+        <div class="place-left padding20 marginHeadings">
+            <h2 ng-model="questionnaireHeading" class="fg-black no-margin place-left clearLeft txtFont headingClass">{{questionnaireHeading}}</h2>
+            <p class="place-left clearLeft quesBasic">Part 1: Questionnaire basics</p>
+        </div>
+    </div>
+    <div class="row padding20 cells4 inputPaddingClass">
+        <div class="cell">
+            <label>Title</label>
+            <div class="input-control text full-size">
+                <input id="title" type="text" ng-model="questionnaireTitle" ng-change="changeTitle()" ng-blur="checkTitle()" class="inputBorder" required>
+                <span style="margin-left: 0%" id="errorTitleww" class="error_title_Message" ng-show="invalidTitle">Questionnaire title is required</span>
+                <span style="margin-left: 0%" id="errorNonEngTitleww" class="error_title_Message" ng-show="isNonEnglishTitle">Non English characters are not allowed</span>
+            </div>
+        </div>
+    </div>
+    <div class="row padding20 inputPaddingClass">
+        <span class="place-left clearLeft">Introduction</span>
+        <div class="input-control textarea place-left clearLeft">
+            <textarea id="questIntro" class="txtAreaWidth"></textarea>
+            <span style="margin-left: 0%" id="errorQuestionnaireIntro" class="error_Message">Questionnaire introduction is required</span>
+            <span style="margin-left: 0%" id="errorNonEngQuestionnaireIntro" class="error_Message">Non English characters are not allowed</span>
+        </div>
+    </div>
+    <div class="row padding20 inputPaddingClass">
+        <span class="place-left clearLeft">Thank you message</span>
+        <div class="input-control textarea place-left clearLeft">
+            <textarea id="questHelpText" class="txtAreaWidth"></textarea>
+            <span style="margin-left: 0%" id="errorQuestionnaireHelpText" class="error_Message">Questionnaire thank you message is required</span>
+            <span style="margin-left: 0%" id="errorNonEngQuestionnaireHelpText" class="error_Message">Non English characters are not allowed</span>
+        </div>
+    </div>
+    <div class="row padding20 inputPaddingClass">
+        <span class="place-left clearLeft">Localization languages</span>
+        <div class="place-left  clearLeft widthd50">
+            <div class="widthd25 place-left">
+                @*<label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">Africans</span>
+                    </label>
+                    <label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">Arabic</span>
+                    </label>
+                    <label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">Balinese</span>
+                    </label>
+                    <label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">Bengali</span>
+                    </label>*@
+            </div>
+            <div class="widthd25 place-left">
+                @*<label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">Chinese</span>
+                    </label>
+                    <label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">Traditional</span>
+                    </label>
+                    <label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">Dutch</span>
+                    </label>*@
+                <label class="input-control checkbox place-left clearLeft">
+                    <input type="checkbox" checked="checked" disabled="disabled">
+                    <span class="check"></span>
+                    <span class="caption">English</span>
+                </label>
+
+            </div>
+            <div class="widthd25 place-left">
+                @*<label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">French</span>
+                    </label>
+                    <label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">German</span>
+                    </label>
+                    <label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">Hebrew</span>
+                    </label>
+                    <label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">Indonesian</span>
+                    </label>*@
+            </div>
+            <div class="widthd25 place-left">
+                @*<label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">Italian</span>
+                    </label>
+                    <label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">Japanese</span>
+                    </label>
+                    <label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">Portuguese</span>
+                    </label>
+                    <label class="input-control checkbox place-left clearLeft">
+                        <input type="checkbox">
+                        <span class="check"></span>
+                        <span class="caption">Spanish</span>
+                    </label>*@
+
+            </div>
+        </div>
+    </div>
+    <div class="row padding20 inputPaddingClass">
+        <span class="place-left clearLeft fontModify">Rules</span>
+    </div>
+
+<div class="row padding20 inputPaddingClass">
+    <div class="place-left width20">
+        <span class="place-left clearLeft">Fiscal Year</span>
+        <select id="fiscalYear" multiple="multiple" class="fiscal margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft widthm100"></select>
+    </div>
+ </div>
+ <div class="padding20 row inputPaddingClass" style="margin-top: -2%;margin-left:-0.5%">
+    <div style="width: 20%;" clas="place-left width20">
+        <span id="errorFiscalyear" class="error_Message">Please select fiscal year</span>
+    </div>
+</div>
+
+    <div class="row padding20 inputPaddingClass">
+        <div class="place-left width20">
+            <span class="place-left clearLeft">Area</span>
+            <select id="area" multiple="multiple" class="area margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft widthm100"></select>
+        </div>
+        <div style="display: none" class="place-left width20">
+            <span class="place-left clearLeft">Subsidiary</span>
+            <div id="subsidiary" class="input-control margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft widthm100" data-role="select">
+                <select id="selectSubsidiary" ng-model="selectedSubsidiary" ng-options="item.SubsidiaryId as item.SubsidiaryText for item in subsdiaries" ng-change="SetSelectSubsidiary()">
+                    <option value="">All</option>
+                </select>
+                <span id="errorSubsidiary" class="error_Message">Please select Subsidiary</span>
+            </div>
+        </div>
+        <div class="place-left width20">
+            <span class="place-left clearLeft">Country</span>
+            <select id="country" multiple="multiple" class="country margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft widthm100"></select>
+        </div>
+    </div>
+
+    <div class="padding20 row inputPaddingClass" style="margin-top: -1%;padding-left:1%">
+        <div class="errorDiv place-left width20">
+            <span id="errorArea" class="error_Message">Please select sales region</span>
+        </div>
+        <div class="errorDiv place-left width20">
+            <span id="errorCountry"  class="error_Message">Please select at least one country</span>
+        </div>
+    </div>
+
+    <div class="row padding20 inputPaddingClass">
+        <button class="button bt-next" ng-click="saveQuestionnaire()">Next</button>
+        <div class="place-right">
+            <button class="button bt-blue" ng-click="redirectWithoutSave()">Cancel</button>
+            <button class="button bt-blue saveQuestions" ng-click="saveQuestionnaireAndRediect()">Save As Draft</button>
+        </div>
+    </div>
+    <script src="/Scripts/controllers/Validation.js"></script>
+
+
+

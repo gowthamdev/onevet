@@ -1,0 +1,110 @@
+﻿@{
+    Layout = null;
+}
+
+<div ng-controller="requestLandingController" class="flex-grid">
+    <div class="row cells12">
+        <div class="cell colspan9 padding20">
+            <div class="row">
+                <!-- Search section-->
+                <h2 class="fg-black no-margin place-left txtFont headingClass">Requests</h2>
+                <div>
+                    <button class="button primary margin20 no-margin-left place-left clearLeft placeholder_font singleReqBtn" ng-click="reDirectToSingleRequest()"><span style="padding-left: 40px">New Single Request</span></button>
+                    <button class="button primary margin20 no-margin-left place-left clearRight placeholder_font batchReqBtn" ng-click="reDirectToBatchRequest()"><span style="padding-left: 30px">New Batch request</span></button>
+
+                </div>
+                <div class="padding20 place-right search_input_width no-padding-right">
+                    <div class="input-control text no-margin">
+                        <input ng-model="searchText" ng-keypress="processSearch($event)" id="dataTableSearchText" size="58" type="text" placeholder="Search" class="textInput searchDataTab ng-pristine ng-valid">
+                        <button id="dataTableSearch" class="button search_btn" ng-click="searchDataTable()">
+                            <span class="mif-search"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="requestStatusTable" class="row colspan9">
+                <table id="requestDataTable" datatable dt-instance="dtInstance" dt-options="dtOptions" dt-columns="dtColumns" dt-column-defs="dtColumnDefs" class="row-border hover desktop-view">
+                  
+                </table>
+            </div>
+        </div>
+
+        <div class="cell colspan3 desktop-view borderfilterLeft padding20">
+            <!-- Filters Section -->
+            <h2 class="fg-black no-margin place-left clearLeft txtFont filterHeader">Filters</h2>
+
+            <!-- <p class="place-left clearLeft requestfilterHeading">Source</p>
+            <label class="input-control checkbox checkboxRequest place-left clearLeft checkBoxMargin " style="margin:0"  >
+                <input id="batchRequest" type="checkbox" name="type" value="1" ng-model="source.batch" ng-change="showData()"/>
+                <span class="check smallCheckbox"></span>
+                <span class="caption filterClass">Batch</span>
+            </label>
+            <label disp class="input-control checkbox checkboxRequest place-left clearLeft" style="margin:0; bottom:10px;" >
+                <input id="singleRequest" type="checkbox" name="type" value="0" ng-model="source.single" ng-change="showData()"/>
+                <span class="check smallCheckbox"></span>
+                <span class="caption filterClass">Single</span>
+            </label> -->
+            <p class="place-left clearLeft requestfilterHeading">Date Range</p>
+            <div class="input-control text place-left clearLeft" id="datepicker_from">
+                <input type="text" placeholder="From" class="dateBorder" id="datePickerFrom" ng-model="fromDate" ng-change="dateChange()">
+                <button class="button dateBorder"><span class="mif-calendar"></span></button>
+            </div>
+
+
+            <div class="input-control text place-left clearLeft" id="datepicker_to">
+                <input type="text" placeholder="To" class="dateBorder" id="datePickerTo" ng-model="toDate" ng-change="dateChange()">
+                <button class="button dateBorder"><span class="mif-calendar"></span></button>
+            </div>
+            <div id="errorDateDiv" class="input-control text place-left clearLeft"><span  class="error_Message" id="errorDate">From date cannot be greater than to date</span></div>
+            <p id="tenantName" style="margin-top: 0px;" class="place-left clearLeft requestfilterHeading filterMargin">Tenant</p>
+            @*<div id="tenantDiv2" class="input-control text place-left clearLeft" style="width: 200px" data-role="select">
+                <select style="width: 200px" id="selectTenant">
+                    <option></option>
+                    <option>Yaiton Ngo</option>
+                    <option>Sneha Karnam</option>
+                    <option>Kiril Forkov</option>
+                    <option>Darshan Gurubaxani</option>
+                </select>
+            </div>*@
+            <div id="tenantDiv" class="input-control text place-left clearLeft" style="width: 200px" data-role="select">
+                <select style="width: 200px" id="selectTenant" ng-model="selectedRequestTenant" ng-options="item.TenantId as item.TenantName for item in tenants" ng-change="setTenant()">
+                    <option></option>
+                </select>
+            </div> 
+            <p class="place-left clearLeft requestfilterHeading">Result</p>
+            <label class="input-control checkbox checkboxRequest place-left clearLeft checkBoxMargin" >
+                <input id="passRequest" type="checkbox" ng-change="toggleResults()" name="type" value="1" ng-model="results['Pass']"/>
+                <span class="check smallCheckbox"></span>
+                <span class="caption filterClass">Pass</span>
+            </label>
+            <label disp class="input-control checkbox checkboxRequest place-left clearLeft" style="bottom: 15px;" >
+                <input id="failRequest" type="checkbox" ng-change="toggleResults()" name="type" value="0" ng-model="results['Fail']"/>
+                <span class="check smallCheckbox"></span>
+                <span class="caption filterClass">Fail</span>
+            </label>
+            <label disp class="input-control checkbox checkboxRequest place-left clearLeft" style="bottom: 35px;">
+                <input id="inProgressRequest" type="checkbox" ng-change="toggleResults()" name="type" value="0" ng-model="results['In progress']"/>
+                <span class="check smallCheckbox"></span>
+                <span class="caption filterClass">In Progress</span>
+            </label>
+            <label disp class="input-control checkbox checkboxRequest place-left clearLeft" style="bottom: 55px;" >
+                <input id="errorRequest" type="checkbox" ng-change="toggleResults()" name="type" value="0" ng-model="results['Error']" />
+                <span class="check smallCheckbox"></span>
+                <span class="caption filterClass">Error</span>
+            </label>
+            <label disp class="input-control checkbox place-left clearLeft" style="bottom: 75px;">
+                <input id="mauanlOverrideRequest" type="checkbox" ng-change="toggleResults()" name="type" value="0" ng-model="results['Override']"/>
+                <span class="check smallCheckbox"></span>
+                <span class="caption filterClass">Manual Override</span>
+            </label>
+           <div class="input-control text place-left clearLeft">
+                 <a href="" ng-click="fnClearFilters()">
+                <img src="/images/generic-cross-12px-accent@2x.png">
+                <span>Clear Filters</span>
+        </a>
+    </div>
+        </div>
+    </div>
+</div>

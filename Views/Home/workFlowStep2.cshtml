@@ -1,0 +1,502 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="margin10">
+    <div class="row">
+        <div class="cell">
+            <h2 class="fg-black headingClass txtFont">Workflow configuration</h2>
+            <p class="quesBasic">2. Workflow steps</p>
+        </div>
+    </div>
+
+
+    <div class="row cells2 form-bg">
+        <div class="cell colspan6 leftb">
+
+            <div class="workflow-graph">
+
+                <div class="padding10">
+                    <div class="symbol-y">
+                        <img src="/images/worklfow-start@2x.png" />
+
+                        <span>&nbsp;<b>Start</b></span>
+                    </div>
+                    <div class="line-v empty-line"></div>
+                    
+                    <div ng-if="addStepData.length">
+                        <div ng-repeat="blockData in addStepData">
+
+                            <div ng-if="(blockData.WFType === 'Automation Condition Evaluation')|| (blockData.WFType === 'Manual Condition Evaluation')?false:true">
+                                <div class="line-v" ng-mouseover="onOver=true" ng-mouseleave="onOver= false" ng-class="{true: 'disablePage'}[stepsDisabled]">
+                                    <div class="line-middle"></div>                                    
+                                    <div class="box-position" ng-class="{true:'selectedTier', false:''}[$index==selectedIndex]">
+                                        <div class="condition-tier" ng-if="blockData.conditionChecked">{{blockData.conditionValue}}</div>
+                                        <div class="marginBold"><b>{{blockData.WFTitle}}</b></div>
+                                        <div class="roleClass" ng-if="blockData.WFRolesGeoTxt">Role: {{blockData.WFRolesGeoTxt}}</div>
+                                        <div ng-show="onOver" class="editbox-check">
+                                            <span class="edit ms-Icon ms-Icon--pencil ms-Icon-Custom-Blue-Edit edit-hover" ng-click="addStepBlock(blockData.id,$index)"></span>
+                                            <span class="delete ms-Icon ms-Icon--trash ms-Icon-Custom-Red-Delete delete-hover" ng-click="stepdelete(blockData.id,$index)"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="line-v empty-line-small"></div>
+                            </div>
+                            <div ng-if="((blockData.WFType === 'Automation Condition Evaluation')||(blockData.WFType === 'Manual Condition Evaluation'))?true:false">
+        <!--                               <div class="end-g symbol-y">
+
+                                    <img src="images/worklfow-condition@2x.png" class="conditioinImg" />
+                                    
+                                    <div class="padding-left-g"><b>{{blockData.WFTitle}}</b></div>
+                                    <div class="roleClass">Condition: {{blockData.WFConditionName}}</div>
+                                </div> -->
+
+                                <div class="condition-over" ng-mouseover="onConditionOver=true" ng-mouseleave="onConditionOver= false">
+
+                                    <img src="images/worklfow-condition@2x.png" class="dimondimg" />
+                                    <div class="line-v" ng-class="{true: 'disablePage'}[stepsDisabled]">
+                                        <div class="line-middle-dimond"></div>
+
+                                        <div class="box-position-d" ng-class="{true:'selectedTier', false:''}[$index==selectedIndex]">
+                                           <div> <b>{{blockData.WFTitle}}</b></div>
+                                            <div class="roleClass-d">Condition: {{blockData.WFConditionName}}</div>
+                                            <div ng-show="onConditionOver" class="editbox-check-d">
+                                                <span class="edit ms-Icon ms-Icon--pencil ms-Icon-Custom-Blue-Edit edit-hover" ng-click="addStepBlock(blockData.id,$index)"></span>
+                                                <span class="delete ms-Icon ms-Icon--trash ms-Icon-Custom-Red-Delete delete-hover" ng-click="stepdelete(blockData.id,$index)"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>
+                                <div class="line-v empty-line"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!--<div class="line-v">
+                        <div class="line-middle"></div>
+                        <div class="box-position">
+                            <div><b>Answer Sponser Questionnaire</b></div>
+                            <div>Role: LCA Area Lead</div>
+                            <div>Questionnaire</div>
+                        </div>
+                    </div>
+
+                    <div class="line-v empty-line-small"></div>-->
+
+                    <div class="add-step-block" ng-class="{true: 'disablePage'}[stepsDisabled]">
+                        <img src="/images/generic-plus-circle-accent.png" />
+                        <span class="add-step" ng-click="addStepStart()">Add step</span>
+                    </div>
+
+                    <div class="line-v empty-line-small"></div>
+
+                    <!--<div class="end-g symbol-y">
+                        <img src="images/worklfow-condition@2x.png"/>
+                        <b class="padding-left-g">Condition : Tier</b>
+                    </div>
+
+                    <div class="line-v empty-line"></div>-->
+                    <!-- <div class="line-v">
+                         <div class="line-middle"></div>
+                         <div class="box-position">
+                             <div><b>Answer Sponser Questionnaire</b></div>
+                             <div>Role: LCA Area Lead</div>
+                             <div>Questionnaire</div>
+                         </div>
+                     </div>
+
+                     <div class="line-v empty-line-small"></div>-->
+                    <!-- <div class="add-step-block">
+                         <img src="images/generic-plus-circle-accent.png"/><span class="add-step">Add Step</span>
+                     </div>-->
+                    <div class="line-v empty-line-small"></div>
+
+                    <div class="end-g symbol-y">
+                        <img src="/images/worklfow-end@2x.png" />
+                        <span>&nbsp;<b>End</b></span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="cell colspan6 rightForm">
+            <div class="workFlowStep2">
+
+                <div class="rightWorkFlowStp2" ng-if="showForm">
+                    <form name="WFStep2">
+                        <input type="hidden" value="{{WF.id}}" />
+
+                        <div class="row padding20 ">
+                            <div class="edit-step">{{formTitle}}</div>
+                            <span class="place-left clearLeft">Type</span>
+                            <!-- <div class="input-control margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft" data-role="select" style="widt: 10%">-->
+                            
+                            <select id="selectWorkFlowType" class="removeArrow" ng-blur="checkType()" ng-options="item.Name as item.Name for item in type" name="WFType" ng-model="WF.WFType" ng-class="{true: 'error'}[submitted && WFStep2.WFType.$invalid]" required ng-change="validateType()">
+                                <option value=''>Choose a type...</option>
+                            </select>
+                            <span class="help-inline" ng-show="(invalidType || (submitted && WFStep2.WFType.$error.required))&&(cancelValidations_Type)">Type is required</span>
+
+
+                            <!-- </div>-->
+                        </div>
+                        <div ng-if="WF.WFType.length ">
+                            <div class="row cells2 padding20 no-padding-top">
+                                <div class="cell colspan6" ng-if="(WF.WFType==='Automation Condition Evaluation')||(WF.WFType==='Manual Condition Evaluation')? true : false">
+
+                                    <span class="place-left clearLeft">Condition type</span>
+                                    @*<div class="input-control margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft" data-role="select">*@
+                                    <select id="selectWFConditionName" class="removeArrow" name="WFConditionName" ng-blur="checkCondition()" ng-options="item.Name as item.Name for item in tierData" ng-model="WF.WFConditionName" ng-class="{true: 'error'}[submitted && WFStep2.WFConditionName.$invalid]" required ng-change="validateConditionName()">
+                                        <option value=''>Choose a condition...</option>
+
+
+
+
+
+                                    </select>
+                                    <span class="help-inline" ng-show="(invalidCondition || (submitted && WFStep2.WFConditionName.$error.required))&&(cancelVaidations_Condition)">Condition name is required</span>
+
+
+                                    @*</div>*@
+                                </div>
+
+                                <div class="cell full-width padding20 no-padding-right no-padding-left no-padding-top" ng-if="(conditionStepsVal && WF.WFType.length && (((WF.WFType==='Automation Condition Evaluation')||(WF.WFType==='Manual Condition Evaluation'))?false:true))">
+                                    <span class="place-left clearLeft">Condition </span>
+                                    @*<div class="input-control margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft" data-role="select">*@
+                                    <select id="chooseCondition" class="removeArrow" ng-options="item.Id as item.Name for item in conditionSteps" name="WFCondition" ng-model="WF.WFCondition" ng-class="{true: 'error'}[submitted && WFStep2.WFCondition.$invalid]" required ng-blur="checkInputConditionType()" ng-change="validateInputConditionType()">
+                                        <option value=''>Choose a condition...</option>
+                                    </select>
+
+                                    <span class="help-inline" ng-show="(invalidConditionType || (submitted && WFStep2.WFCondition.$error.required))&&(cancelValidations_ConditionType)">Condition is required</span>
+
+                                    <!--</div>  ng-if="(WF.WFPreviousStep=='Condition (Tier)'?true:false)"-->
+                                </div>
+                                <div class="cell full-width padding20 no-padding-right no-padding-left no-padding-bottom" ng-if="(stepsVal && WF.WFType.length && ((WF.WFType==='Automation Condition Evaluation')?true:false))">
+                                    <span class="place-left clearLeft">Input Steps </span>
+                                    @*<div class="input-control margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft" data-role="select">*@
+
+                                    <select id="selectWFPrevStep" class= "removeArrow" ng-options="item.Id as item.Name for item in  steps" name="WFInputStep" ng-model="WF.WFInputStep" ng-class="{true: 'error'}[submitted && WFStep2.WFCondition.$invalid]" required ng-blur="checkInputStep()" ng-change="validateInputStep()">
+                                        <option value=''>Choose a step...</option>
+                                    </select>
+
+                                    <span class="help-inline" ng-show="(invalidInputStep || (submitted && WFStep2.WFInputStep.$error.required))&&(cancelValidations_Input)">Input step is required</span>
+
+                                    <!--</div>  ng-if="(WF.WFPreviousStep=='Condition (Tier)'?true:false)"-->
+                                </div>
+
+                                <div class="cell colspan6" ng-if="WF.WFCondition">
+                                    <div class="row">
+                                        <div class="cell">
+                                            <span class="place-left clearLeft">Condition value</span>
+                                        </div>
+                                    </div>
+                                    <div class="row cells4">
+                                        <div class="cell" ng-repeat="opt in condition">
+                                            <label class="input-control checkbox send-text place-left clearLeft checkBoxMargin">
+                                                <input type="checkbox" ng-model="condValue.selected[opt.id]" ng-true-value="{{opt.name}}" ng-false-value="" ng-click="tierChange(opt.name)">
+                                                <span class="check tierCheckbox"></span>
+                                                <span class="send-text">{{opt.name}}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+                        </div>
+                        <div class="row cells2 padding20 no-padding-top marginFields">
+                            <div class="row" ng-if="WF.WFType.length">
+
+                                <div class="cell">
+                                    <label>Title</label>
+                                    <div class="input-control full-width">
+                                        <input type="text" name="WFTitle" maxlength="100" ng-blur="checkTitle()" ng-model="WF.WFTitle" ng-class="{true: 'error'}[submitted && WFStep2.WFTitle.$invalid]" required ng-change="validateTitle()">
+                                        <span class="errorMsg" ng-show="(invalidTitle || (submitted && WFStep2.WFTitle.$error.required)) && (cancelValidations_Title)">Title is required</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div  ng-if="(WF.WFType.length && WF.WFType!='Auto-approve')">
+                        <div class="row cells2 padding20 no-padding-top no-padding-bottom" ng-if="WF.WFType == 'Questionnaire'">
+                            <div class="cell padding20 no-padding-right no-padding-left colspan9">
+                                <span class="place-left clearLeft">Questionnaire</span>
+
+                                <div class="tab-group-content alignLeft margin10 no-margin-left">
+                                    
+                                    <div class="input-control text no-margin questionnaireSearch">
+                                        
+                                        <input type="text" class="inputSearchQuestionnaire insertSearch" name="WFQuestionnaire" placeholder = "Search a questionnaire" ng-blur="checkQuestionnaire()" ng-model="WF.WFQuestionnaire" ng-class="{true: 'error'}[submitted && WFStep2.WFQuestionnaire.$invalid]" required ng-change="validateQuestionnaire()">
+                                        
+                                            
+
+                                            
+                                      
+                                        <span class="errorMsg" ng-show="(invalidQuestionnaire || (submitted && WFStep2.WFQuestionnaire.$error.required)) && (cancelValidations_Questionnaire)">Please enter a valid questionnaire name</span>
+                                        <span id="results" class="errorMsg"></span>
+
+                                    </div>
+                                </div>
+
+
+
+
+                                @*<div class="input-control margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft" data-role="select">*@
+                                @*<select id="selectQuestionnaire" ng-options="item.Id  as item.Name for item in questionnaire" name="WFQuestionnaire" ng-model="WF.WFQuestionnaire" required></select>
+                                <span class="help-inline" ng-show="submitted && WFStep2.WFQuestionnaire.$error.required">questionnaire Required</span>*@
+                                @*</div>*@
+
+
+                            </div>
+                            <div class="">
+                                <a class="place-right padding40 no-padding-right no-padding-left tabPointer prevMargin" ng-click="previewQuestionnaire($event)">Preview</a>
+                            </div>
+                        </div>
+
+                        <div class="row padding20 no-padding-top" ng-if="(WF.WFType.length && WF.WFType!='Automation Condition Evaluation' && WF.WFType!='Manual Condition Evaluation' && showCustom)">
+                            <span class="place-left clearLeft padding20 no-padding-left no-padding-right bold-text">Roles</span>
+                            <span class="place-left clearLeft">Geo-specific</span>
+                            <!--<div class="input-control margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft" data-role="select">-->
+                            <select id="selectRole" name="WFRolesGeo" class="removeArrow" ng-options="item.Id  as item.Name for item in geoSpecific" ng-model="WF.WFRolesGeo" ng-class="{true: 'error'}[submitted && WFStep2.WFRolesGeo.$invalid]">
+                                <option value=''>Choose a role...</option>
+                            </select>
+                           <!-- <span class="help-inline" ng-show="(invalidGeo || (submitted && WFStep2.WFRolesGeo.$error.required))&&(cancelValidations_Geo)">Geo-specific role is required</span>-->
+
+                            <!--</div>-->
+                        </div>
+                        <div class="row padding20 cells4 no-padding-top" ng-if="(WF.WFType.length && WF.WFType!='Automation Condition Evaluation' && WF.WFType!='Manual Condition Evaluation')">
+
+                            <div class="cell">
+                                <label>Custom</label>
+                                <div class="input-control text workFlow_Title">
+                                    <input type="text" name="WFRolesCustom"  ng-model="WF.WFRolesCustom" class="customRole">
+                                    @*<span class="errorMsg" ng-show="invalidCustom || (submitted && WFStep2.WFRolesCustom.$error.required)">Custom Required</span>*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row padding20 no-padding-top bold-text" ng-if="(WF.WFType.length && WF.WFType!='Automation Condition Evaluation' && WF.WFType!='Manual Condition Evaluation')">
+                            <label>Reminders</label>
+                        </div>
+                        <div class="row padding20 no-padding-top" ng-if="(WF.WFType.length && WF.WFType!='Automation Condition Evaluation' && WF.WFType!='Manual Condition Evaluation')">
+                            <span class=" place-left clearLeft ">Message</span>
+                            <div class="input-control textarea place-left clearLeft workFlow_Editor">
+                                <textarea name="WFReminders" ng-blur="checkReminders()" ng-model="WF.WFReminders" ng-class="{true: 'error'}[submitted && WFStep2.WFReminders.$invalid]" required ng-change="validateReminders()"></textarea>
+                                <span class="errorMsg" ng-show="(invalidReminders || (submitted && WFStep2.WFReminders.$error.required))&&(cancelValidations_Reminders)">Message is required</span>
+                            </div>
+                        </div>
+                        <div class="row padding20" ng-if="(WF.WFType.length && WF.WFType!= 'Automation Condition Evaluation' && WF.WFType!='Manual Condition Evaluation')">
+                            <label>Frequency</label>
+                        </div>
+                        <div class="row padding20 no-padding-top" ng-if="(WF.WFType.length && WF.WFType!='Automation Condition Evaluation' && WF.WFType!='Manual Condition Evaluation')">
+                            <label class="send-text">Send <input id="WFFrequency" type="text" class="textbox-send" name="WFFrequency" ng-blur="checkFreq()" ng-model="WF.WFFrequency" ng-change="validateFrequency()" ng-class="{true: 'error'}[submitted && WFStep2.WFFrequency.$invalid]" required/> times in <input id="WFDays" type="text" class="textbox-send" name="WFDays" ng-blur="checkDays()" ng-model="WF.WFDays" ng-class="{true: 'error'}[submitted && WFStep2.WFDays.$invalid]" required ng-change="validateDays()"/> days</label>
+                        </div>
+                        <div ng-show="numericFreq" class="errorNumeric padding20 no-padding-top no-padding-bottom">Please enter a numeric value</div>
+                        <div ng-show="(invalidFreq || (submitted && WFStep2.WFFrequency.$error.required))&&(cancelValidations_Freq)" class="errorNumeric padding20 no-padding-top no-padding-bottom">Frequency is required</div>
+                        <div ng-show="(invalidDays || (submitted && WFStep2.WFDays.$error.required))&&(cancelValidations_Days)" class="errorNumeric padding20 no-padding-top no-padding-bottom">Number of days is required</div>
+
+
+
+
+                        @*<span class="errorMsg" ng-show="submitted && WFStep2.WFReminders.$error.required">Reminders Required</span>*@
+
+
+                        <div class="row padding20 no-padding-top" ng-if="(WF.WFType.length && WF.WFType!='Automation Condition Evaluation' && WF.WFType!='Manual Condition Evaluation')">
+
+                            <label class="input-control checkbox send-text place-left clearLeft checkBoxMargin">
+                                <input type="checkbox" ng-model="WF.WFSendCopy" />
+                                <span class="check smallCheckbox"></span>
+                                <span class="send-text">Send copy to managers</span>
+                            </label>
+
+
+
+                            @*<label class="send-text"><input type="checkbox" ng-model="WF.WFSendCopy" /> send copy to managers</label>*@
+                        </div>
+                        </div><!-- Approve condition -->
+
+                    </form>
+                    <div class=" row padding20">
+                        @*<button class="button bt-blue" type="submit" ng-click="saveWorkflowStep2(WFStep2)">Done</button>
+                            <button>cancel</button>*@
+
+                        <div class="actionButtonDone" ng-click="saveWorkflowStep2(WFStep2)"><img src="/images/generic-tick-small-accent@2x.png">&nbsp;Done</div>
+                        <div class="cancelWF actionButtonCancel margin80" ng-click="cancelStep()"><img src="/images/generic-cross-12px-accent@2x.png">&nbsp;Cancel</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="row cells2 padding20">
+        <div class="cell colspan6">
+            <button class="button bt-next" ng-click="goToPrevious()" ng-class="{true: 'disablePage'}[stepsDisabled]">Previous</button>
+            <button id="submitWorkflow" class="button bt-next" ng-click="publishWorkflow()" ng-class="{true: 'disablePage'}[stepsDisabled]">Submit</button>
+
+        </div>
+
+        <div class="cell colspan6">
+            <div class="place-right">
+                
+                <button class="button bt-blue btn-width" ng-click="saveAsDraft()" ng-class="{true: 'disablePage'}[stepsDisabled]">Close</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div data-role="dialog" id="dialogPreviewQuestionnaire" class="padding1 dialog" data-close-button="false" data-overlay-color="op-dark" data-width="80%" data-height="90%" data-overlay="true" preview-links-open-new-window>
+
+        <div class="previewBack" onclick="hideMetroDialogDiv('#dialogPreviewQuestionnaire'); destroyWizard('#previewWizard');">
+            <img src="/images/generic-back-arrow-white.svg" width="15" height="15" alt="Back" /> &nbsp;Questionnaire preview
+        </div>
+
+        <div class="row cell txtHeading desktop-view previewOnly">
+            <div class="cell align-center">
+                This is a preview. Questionnaire answers won't be saved.
+            </div>
+        </div>
+
+        <div class="row cells2 txtHeading desktop-view previewLogoLine">
+            <div class="cell">
+                OneVet
+            </div>
+            <div class="cell align-right">
+                <img src="/images/microsoft-logo.svg" alt="Microsoft logo" width="84" height="27" />
+            </div>
+        </div>
+
+        <div class="row cells4 bg-blueWhite text-enlarged previewHeading desktop-view">
+            <div class="previewHeadingLeft cell colspan3">
+                {{questionnaireName}}
+            </div>
+            <div class="previewHeadingRight cell">
+                <div>{{questionnairePreviewPercentageComplete}}% completed</div>
+                <div class="answers">Page {{questionnairePreviewCurrentPageNumber}}/{{questionnairePreviewPageCount}}</div>
+            </div>
+        </div>
+
+        <div class="previewMain">
+
+            <div class="previewWelcome">
+                <div class="previewIntro" ng-bind-html="renderHtml(questionnaireIntro)"></div>
+                <button class="bt-next btn-next" ng-click="goToWizard($event)">Continue</button>
+            </div>
+
+            <div class="wizard" id="previewWizard" data-stepper-type="cycle" data-buttons='{"next": {"show": true, "title": "Next", "cls": "bt-next", "group": "right"}, "prior": {"show": true, "title": "Previous", "cls": "bt-next", "group": "left"}, "cancel": {"show": false}, "help": {"show": false}, "finish": {"show": true, "title": "Submit", "cls": "bt-next", "group": "right"}}'>
+
+                <div class="steps">
+
+
+                    <div class="step" ng-repeat="page in questionnairePreviewPages" fin-preview-pages-load>
+                        <h1>{{page.PageTitle}}</h1>
+
+                        <div class="row small" ng-show="page.PageIntro" ng-bind-html="renderHtml(page.PageIntro)"></div>
+
+                        <div class="row cells12" id="question{{question.QuestionVersionId}}" ng-repeat="question in questionResult" fin-preview-questions-load>
+
+                            <div class="cell" ng-class="{'width25' : (question.DisplayOrder.toString().indexOf('.')==-1),'width45 questionHide' : (question.DisplayOrder.toString().indexOf('.')!=-1 && !question.IsRequired),'width45' : (question.DisplayOrder.toString().indexOf('.')!=-1  && question.IsRequired)}">
+                                <h2>{{question.DisplayOrder}}</h2>
+                            </div>
+                            <div class="cell" ng-class="{'colspan11' : (question.DisplayOrder.toString().indexOf('.')==-1),'colspan10 questionHide' : (question.DisplayOrder.toString().indexOf('.')!=-1  && !question.IsRequired),'colspan10' : (question.DisplayOrder.toString().indexOf('.')!=-1  && question.IsRequired)}">
+                                <h2>{{question.QuestionText}} <span data-role="hint" data-hint-color="fg-white" data-hint-mode="2" data-hint-position="right" data-hint-background="#0078d6" data-hint="{{question.QuestionHelpText}}"><img src="/images/generic-input-help.svg" class="hintQuestionMark" width="15" height="15" /></span></h2>
+                                <div class="row small" ng-show="question.QuestionContent" ng-bind-html="renderHtml(question.QuestionContent)"></div>
+
+                                <div class="input-control textarea ctlMargin" ng-if="question.AnswerType == 'Free Text'">
+                                    <textarea id="{{question.QuestionVersionId}}" name="{{question.QuestionVersionId}}" class="txtAreaWidth"></textarea>
+                                </div>
+
+                                <div ng-if="question.AnswerType == 'Single Choice'" class="ctlMargin">
+                                    <div ng-repeat="option in question.QuestionsOptionPreview">
+                                        <label class="input-control radio small-check" ng-click="showChildQuestionsSingleChoice(option.BranchingQuestionIds, question.QuestionVersionId)" ng-if="option.OptionText!='ISREQUIRED'">
+                                            <input type="radio" value="{{option.OptionText}}" id="{{question.QuestionVersionId}}" name="{{question.QuestionVersionId}}" branchingQuestion="{{option.BranchingQuestionIds}}" weight="{{option.OptionWeight}}" />
+                                            <span class="check"></span>
+                                            <span class="caption">{{option.OptionText}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div ng-if="question.AnswerType == 'Multiple Choice'" class="ctlMargin">
+                                    <div ng-repeat="option in question.QuestionsOptionPreview" ng-click="showChildQuestionsMultipleChoice(question.ChildQuestionGroups, question.QuestionVersionId)">
+                                        <label class="input-control checkbox small-check" ng-if="option.OptionText!='ISREQUIRED'">
+                                            <input type="checkbox" value="{{option.OptionId}}" id="{{question.QuestionVersionId}}" name="{{question.QuestionVersionId}}" branchingQuestion="{{option.BranchingQuestionIds}}" weight="{{option.OptionWeight}}" />
+                                            <span class="check"></span>
+                                            <span class="caption">{{option.OptionText}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div ng-if="question.AnswerType == 'Attachment'" class="row cells3 ctlMargin">
+                                    <div class="cell">
+
+                                        <div class="input-control file full-size topMargin" data-role="input">
+                                            <label>File</label>
+                                            <input type="file" id="{{question.QuestionVersionId}}">
+                                            <button class="button"><span class="mif-folder"></span></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div ng-if="question.AnswerType == 'Data List'" class="row cells3 ctlMargin">
+                                    <div ng-controller="previewQuestionnaireDataList">
+                                        <div ng-repeat="entry in dataListEntries" class="dataListDisplay row cells12">
+                                            <div class="cell colspan10">
+                                                <div></div>
+                                                <div ng-repeat="field in entry.fields">
+                                                    <div ng-repeat="(key, value) in field" class="padding5">
+                                                        {{value}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="cell colspan2">
+                                                <!--<a ng-click="removeEntry($index)">Edit</a> &nbsp;--><a ng-click="removeEntry($index)">Delete</a>
+                                            </div>
+                                        </div>
+
+                                        <div ng-repeat="option in question.QuestionOptions" class="row cells2 topMargin">
+                                            <div class="cell">
+                                                <label>{{option.OptionText}}</label>
+                                                <div class="input-control text full-size">
+                                                    <input type="text" id="{{option.OptionId}}" ng-model="dataListEntry.datalistFields[$index]">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="datalistAddBtn">
+                                            <a ng-click="saveDataList()"><img src="/images/generic-plus-circle.svg" width="35" height="35" /> &nbsp;Add</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="previewBye">
+                <div class="previewFinish" ng-bind-html="renderHtml(questionnaireThankYou)"></div>
+                <button class="bt-next btn-next" onclick="hideMetroDialogDiv('#dialogPreviewQuestionnaire'); destroyWizard('#previewWizard');">Finish</button>
+            </div>
+        </div>
+    </div>
+    <div data-role="dialog" id="dialogDeleteStep" class="padding20 dialog deletePageModal" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px;">
+        <h1 class="modalFont">Do you want to delete this step?</h1>
+        <div class="place-right marginTop50">
+            <button class="pageDeleteConfirm button bt-next modalMargin" ng-click="deleteStepConfirm(id)">Yes</button>
+
+            <button class="button modalCancel modalMargin" ng-click="deleteStepCancel()">No</button>
+        </div>
+        <span class="dialog-close-button"></span>
+    </div>
+    </div>

@@ -1,0 +1,663 @@
+﻿@using Microsoft.OneVet.UI.Web.Code
+<div data-role="dialog" id="changeOwnerDialog" class="padding20 dialog changeOwerModal" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: auto; min-width: 50%; height: auto; visibility: hidden; left: 328.5px; top: 287.5px;">
+    <div class="changeOwnerDialogBlock padding10 no-padding-top">
+        <div class="change-step-owner">
+            <img src="/images/generic-back-arrow-white.svg" width="18" height="18" alt="Back"> &nbsp;change step Owner
+        </div>
+        <div ng-repeat="step in stepDetails">
+        
+        <div class="row padding10 cells3 grey-border-bottom" ng-if="step.PreviousStep">
+            <div class="cell colspan2"><img src="~/images/circlec.svg" class="svgImg" /> &nbsp; <label>{{step.Step}}</label></div>
+            <div class="cell">
+              
+                <div><div type="text" value="some text" class="model-input-text disablePage"><span class="model-input-bggrey"><label>{{step.Reviewer}}</label>&nbsp;&nbsp;&nbsp;<img src="~/images/generic-cross-12px-black.png" width="10px" /></span></div></div>
+            </div>
+        </div>
+        <div class="row padding10 cells3 grey-border-bottom" ng-if="step.CurrentStep">
+            <div class="cell colspan2"><img src="~/images/circlei.svg" class="svgImg" /> &nbsp; <label>{{step.Step}}</label></div>
+            <div class="cell">
+                <input name="tier" type="text" ng-model="step.Reviewer" ng-blur="verifyAlias($index,step.Reviewer)" ng-if="!step.toggleEdit" focus-me="!step.toggleEdit" >
+
+                <div ng-if="step.toggleEdit"><div type="text" value="some text" class="model-input-text"><span class="model-input-bggrey"><label>{{step.Reviewer}}</label>&nbsp;&nbsp;&nbsp;<img src="~/images/generic-cross-12px-black.png" width="10px" ng-click="cancelEmail($index)" /></span></div></div>
+            </div>
+        </div>
+        <div class="row padding10 cells3 grey-border-bottom" ng-if="step.FutureStep">
+            <div class="cell colspan2"><img src="~/images/circle.svg" class="svgImg" /> &nbsp; <label>{{step.Step}}</label></div>
+            <div class="cell">
+                <input name="tier" type="text" ng-model="step.Reviewer" ng-blur="verifyAlias($index,step.Reviewer)" ng-if="!step.toggleEdit" focus-me="!step.toggleEdit" >
+
+                <div ng-if="step.toggleEdit"><div type="text" value="some text" class="model-input-text"><span class="model-input-bggrey"><label>{{step.Reviewer}}</label>&nbsp;&nbsp;&nbsp;<img src="~/images/generic-cross-12px-black.png" width="10px"class="cross" ng-click="cancelEmail($index)"/></span></div></div>
+            </div>
+        </div>
+            </div>
+       
+        <div class="row padding10">&nbsp;</div>
+        <div class="row padding10">
+            <button class="button bt-next" ng-click="submitList()">Submit</button>&nbsp;&nbsp;&nbsp;
+            <button class="button bt-blue" ng-click="">Cancel</button>
+        </div>
+
+    </div>
+
+</div>
+<div data-role="dialog" id="dialogReviewerApproverAttestation" class="padding20 dialog attestationPageModel" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true">
+    <div class="row">
+        <div class="cell">
+            <b><span id="attestationName"></span></b>
+        </div>
+    </div>    
+    <div class="row">
+        <div class="cell padding10 no-padding-bottom no-padding-left no-padding-right">
+            <div class="acdetails-lineheight-para">
+                In accordance with Microsoft’s <a target="_blank" href="https://microsoft.sharepoint.com/sites/mspolicy/LegalComplianceEthics/Pages/Anti-Corruption-Policy.aspx">Anti-Corruption</a> and <a target="_blank" href="https://microsoft.sharepoint.com/sites/mspolicy/LegalComplianceEthics/Pages/Trustworthy-Representatives-Policy.aspx">
+                    Trustworthy
+                    Representatives
+                </a> policies, you are being asked whether you believe this Representative to be a
+                legitimate business with a reputation for integrity that should be allowed to conduct business with Microsoft.
+                Your <span id="recomnndations"></span> should be based on:
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="cell">
+            <div class="controls">
+                <ul style="margin-left: 3px">
+                    <li>All of the materials contained in the OneVet Tool regarding this Representative;</li>
+                    <li>The documented recommendations in the OneVet Tool from other Recommenders regarding this <span id="representative"></span> </li>
+                    <li>Your personal knowledge of and experience with this Representative (if any); and</li>
+                    <li>Other information related to this Representative that you may be aware of (if any).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="cell">
+            <b>EMPLOYEE CERTIFICATION </b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="cell padding10 no-margin-left no-padding-right">
+            <div>By typing my name as it appears below, I certify that I have:</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="cell">
+            <div class="control">
+                <ul style="margin-left: 3px">
+                    <li>Reviewed all of the vetting documentation and information presented in OneVet related to this Representative;</li>
+                    <li>Accurately and completely documented any new information in the OneVet Tool regarding this Representative, including potential <a target="_blank" href="https://microsoft.sharepoint.com/sites/lcaweb/Home/Business-Conduct-and-Compliance/Government-Officials-and-Anti-Corruption/Red-Flags"> Anti-Corruption Red Flags, </a> or other concerns, to the best of my knowledge; </li>
+                    <li> Not knowingly omitted any facts or <a target="_blank" href="https://microsoft.sharepoint.com/sites/lcaweb/Home/Business-Conduct-and-Compliance/Government-Officials-and-Anti-Corruption/Red-Flags">Anti-Corruption Red Flags </a> identified by or disclosed to me that Microsoft leadership may consider important in making an informed decision on whether this Representative should be allowed to conduct business with or on behalf of Microsoft; and</li>
+                    <li>Made my <span id="decision"></span> based on the best interests of Microsoft.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="cell padding40 no-padding-top no-padding-left no-padding-right">
+            <div class="">
+                <label>Employee's name: <span id="employeeName" ng-model="employeeNameSpan">@User.FirstName() @User.LastName()</span></label>
+            </div>
+            <div class="input-control text full-size">
+                <input id="employeeNameRepeat" onpaste="return false" type="text" ng-keyup="hideErrorMessage()" ng-model="employeeNameText" class="inputBorder" style="width: 386px; margin-top: 3px;" />
+                <span id="errorMismatchName" class="errMsg" style="display: none; margin-top: 3px;">Entered name does not match. Please re-type your name as shown above.</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="cell">
+            <button class="pageDeleteConfirm button bt-next modalMargin" ng-click="submitReview(3,reviewsForm)">Submit</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="button modalCancel modalMargin" ng-click="discardModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+<div data-role="dialog" id="changeTier" class="padding20 dialog" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px;">
+    @*<h1 class="modalFont">Do you want to delete the page and all its questions?</h1>*@
+    <div class="controls">
+        <label class="radio">
+            <input name="tier" type="radio" ng-model="value" ng-change="newTierValue(value)" value="Tier 1" ng-selected="currentTierDataValue == 'Tier 1'">
+            Tier 1 (High)
+        </label>
+
+        <label class="radio">
+            <input name="tier" type="radio" ng-model="value" ng-change="newTierValue(value)" value="Tier 2"  ng-selected="currentTierDataValue == 'Tier 2'">
+            Tier 2 (Medium)
+        </label>
+        <label class="radio">
+            <input name="tier" type="radio" ng-model="value" ng-change="newTierValue(value)" value="Tier 3" ng-selected="currentTierDataValue == 'Tier 3'">
+            Tier 3 (Low)
+        </label>
+
+    </div>
+    <div class="place-right marginTop50">
+        <button class="pageDeleteConfirm button bt-next modalMargin" ng-click="changeTier()">Submit</button>
+
+        <button class="button modalCancel modalMargin" ng-click="discardModal()">Cancel</button>
+    </div>
+</div>
+<div data-role="dialog" id="dialogDeleteAttachment" class="padding20 dialog deletePageModal" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px;">
+    <h1 class="modalFont">Do you want to delete this attachment?</h1>
+    <div class="place-right marginTop50">
+        <button type="button" class="pageDeleteConfirm button bt-next modalMargin" ng-click="reviewAttachmentDelete(ind)">Yes</button>
+
+        <button type="button" class="button modalCancel modalMargin" ng-click="deleteAttachmentCancel()">No</button>
+    </div>
+    <span class="dialog-close-button"></span>
+</div>
+<div data-role="dialog" id="dialogRetrigger" class="padding20 dialog reTriggerModal" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px;">
+    <h1 class="modalFont">This step and all subsequent steps that have already been completed will be re-triggered. Do you wish to continue?</h1>
+    <div class="place-right marginTop50">
+        <button class="pageDeleteConfirm button btn-retrigger modalMargin" ng-click="reTriggerStep(requestId,id)">Re-trigger</button>
+
+        <button class="button modalCancel modalMargin" ng-click="cancelRetrigger()">Cancel</button>
+    </div>
+    <span class="dialog-close-button"></span>
+</div>
+<div class="row">
+    <div class="cell">
+        <h1 class="padding20 acFont">Anti-corruption check</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="cell padding20 no-padding-top">
+        <div class="box">
+            <div class="row cells9">
+
+                <div class="cell colspan5 padding10 no-padding-top no-padding-bottom right-b">
+                    <h2 class="header">{{companyDetails.companyName}}</h2>
+
+                    <div class="row cells4 padding10 no-padding-left no-padding-right no-padding-bottom">
+                        <div class="cell">
+                            <label>Entity Id:</label>
+                        </div>
+                        <div class="cell colspan3">
+                            <label>{{companyDetails.id}}</label>
+                        </div>
+                    </div>
+
+                    <div class="row cells4 padding10 no-padding-left no-padding-right no-padding-bottom">
+                        <div class="cell">
+                            <label>Address:</label>
+                        </div>
+                        <div class="cell colspan3">
+                            <label>{{companyDetails.address}}</label>
+                        </div>
+                    </div>
+
+
+                    <div class="row cells4 padding10 no-padding-left no-padding-right no-padding-bottom">
+                        <div class="cell">
+                            <label>Audience:</label>
+                        </div>
+                        <div class="cell colspan3">
+                            <label>{{companyDetails.audience}}</label>
+                        </div>
+                    </div>
+                    <div class="row cells4 padding10 no-padding-left no-padding-right no-padding-bottom">
+                        <div class="cell">
+                            <label>Audience sub-type:</label>
+                        </div>
+                        <div class="cell colspan3">
+                            <label>{{companyDetails.audienceSubType}}</label>
+                        </div>
+                    </div>
+                    <div class="row cells4 padding20 no-padding-left no-padding-right no-padding-bottom">
+                        <div class="cell">
+                            <label></label>
+                        </div>
+                        <div class="cell colspan3">
+                            <label></label>
+                        </div>
+                    </div>
+                    <div class="row cells4 padding10 no-padding-left no-padding-right">
+                        <div class="cell">
+                            <label></label>
+                        </div>
+                        <div class="cell colspan3">
+                            <label></label>
+                        </div>
+                    </div>
+                    <div class="row cells4 padding10 no-padding-left no-padding-right">&nbsp;</div>
+
+
+                </div>
+
+                <div class="cell colspan4 no-padding-top no-padding-right padding10 no-padding-left">
+                    <div class="padding10 no-padding-top">
+                        <h2 class="header">Details</h2>
+                        <input id="reviewIdForm" type="hidden" value="">
+                        <div class="row cells9 padding10 no-padding-bottom no-padding-right no-padding-left">
+
+                            <div class="cell colspan6">
+                                <div><label>Request Id: {{companyDetails.requestId}}</label></div>
+                                <div class="padding-top-6"><label>Tenant: {{companyDetails.tenant_Name}}</label></div>
+                            </div>
+                            <div class="cell colspan3">
+                                <div><label>Current {{currentTierDataValue}} <a style="text-decoration: underline;" ng-if="changeFlag" onclick="showDialogchangeTier()"> (Change)</a></label></div>
+                                <div class="padding-top-6"><label id="pre" style="color: gray;">Previous  {{previousTierDataValue}}</label></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row padding10">
+                        <label></label>
+                    </div>
+                    <div class="row gray-border-topn"></div>
+                    <div class="row padding20 no-padding-bottom">
+                        <label></label>
+                        <div class="line-graph-custom" id="lineGraph"></div>
+                    </div>
+
+                    <div class="padding10">
+                        <div class="row cells2 padding10 no-padding-bottom no-padding-right no-padding-left">
+                            <div class="cell">
+                                <div ng-if="selectedStepDesc"><label class="stepName">Step {{stepNo}} : {{selectedStepDesc}}</label></div>
+                                <div class="padding10 no-padding-right no-padding-left" ng-if="selectedStepReview"><label class="reviewerName">Reviewer: {{selectedStepReview}}</label></div>
+                            </div>
+                            <div class="cell place-right">
+                                <div class="padding20 no-padding-bottom no-padding-right no-padding-left"><img src="~/images/request-ac-changeowner.svg" onclick="showDialogChangeOwner()" width="50px" alt="images" /> &nbsp; <img src="~/images/request-ac-retrigger.svg" ng-click="showDialogRetrigger(selectedStepId)" ng-class="{true: 'disablePage'}[triggerDisabled]" class="pointerClass" width="30px" alt="images" /></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- second block-->
+<div class="row cells3 padding20">
+    <div class="cell colspan2 padding20 no-padding-left no-padding-top no-padding-bottom">
+
+        <div class="row cells3 review-head">
+            <div class="cell"><a id="WFReview" style="font-weight: 300!important" class="activeBlue pointerClass fontHeaders" ng-click="changeClass('#WFReview',$event)">Reviews</a></div>
+            <div class="cell"><a id="WFAttachments" style="font-weight: 300!important" class="fg-lightgray pointerClass fontHeaders" ng-click="changeClass('#WFAttachments');">Reports</a></div>
+            <div class="cell"><a id="WFQuestioner" style="font-weight: 300!important" class="fg-lightgray pointerClass fontHeaders" ng-click="changeClass('#WFQuestioner',$event)">Questionnaires</a></div>
+        </div>
+
+        <!-- review block start here-->
+
+        <div class="row review-block hide" ng-if="WFReview">
+             <div class="row cells4 padding20 no-padding-right no-padding-left">
+                 <div class="cell" ng-show="noReviews">No reviews yet</div>
+                 </div>
+            <div class="cell" data-ng-repeat="block in reviewEvidence | orderBy: 'DateTimeModified':true">
+                <div class="row cells4 padding20 no-padding-right no-padding-left">
+                    <div class="cell">
+                        <label class="small-text">Reviewer</label>
+                        <div class="padding5 no-padding-left no-padding-right">
+                            <label><b class="small-text">{{block.Reviewer.Name}}</b></label>
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <label class="small-text">Role</label>
+                        <div class="padding5 no-padding-left no-padding-right">
+                            <label><b class="small-text">{{block.Reviewer.Role}}</b></label>
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <label class="small-text">Recommendation</label>
+                        <div class="padding5 no-padding-left no-padding-right">
+                            <label><b class="small-text">{{block.Name}}</b></label>
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <label class="small-text">Date</label>
+                        <div class="padding5 no-padding-left no-padding-right">
+                            <label><b class="small-text">{{convertToUTC(block.DateTimeModified)|date:'mediumDate'}}</b></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row padding10 no-padding-left no-padding-right no-padding-top">
+                    <div class="cell">
+                        <label class="small-text">Comment</label>
+                        <div class="comment-text padding5 no-padding-left no-padding-right" ng-bind-html="block.Comment">
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row padding10 no-padding-left no-padding-right no-paddding-bottom">
+                   
+                    <div class="cell">
+                        <label class="small-text"><span class="ms-Icon ms-Icon--attachment customAttachment"></span>Attachments</label>
+                        <div class="row padding10 no-padding-right">
+                            <div class="cell" ng-if="(block.Attachments.length==0)">None</div>
+                            </div>
+                            <div class="row padding10 no-padding-right" ng-repeat="attachment in block.Attachments">
+
+                                <div class="cell">
+                                    <label><a ng-href="{{attachment.AttachmentUrl}}" target="_blank"><span class="small-text">{{attachment.Name}}</span></a></label>
+                                    <div class="small-text padding5 no-padding-left no-padding-right">{{attachment.Description}}</div>
+                                    <div class="small-text padding5 no-padding-left no-padding-right">{{convertToUTC(attachment.DateTimeCreated)|date:'mediumDate'}}</div>
+                                </div>
+                            </div>
+
+                        </div>
+                </div>
+
+                <div class="row width90">
+                    @*<div class="place-right"><a href="#"><span class="ms-Icon ms-Icon--pencil customPencil"></span></a></div>*@
+                    <div class="row border-top-g"></div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <!-- review block end here-->
+        <!-- Reports block start here-->
+        <div class="row reports-block" ng-if="WFAttachments">
+            <div class="cell">
+                <div class="row margin10">&nbsp;</div>
+            </div>
+
+            <div class="cell" ng-repeat="block in reportDetails|orderBy:'DateTimeCreated':true">
+                <div class="reports-block-box">
+                    <div class="row padding10 no-padding-right no-padding-top no-padding-bottom">
+                        <div class="cell">
+                            <label><a ng-href="{{block.AttachmentUrl}}" class="underlinedText" target="_blank">{{block.Name}}</a></label>
+                            <div class="place-right"><span class="ms-Icon ms-Icon--trash ms-Icon-Custom-Red-Delete" ng-click="deleteAttachment(block.AttachmentID,block.AttachmentUrl)"></span></div>
+                        </div>
+                    </div>
+                    <div class="row padding10 no-padding-right no-padding-bottom">
+                        <div class="cell">
+                            <label class="wt400"><b>Upload date:</b> {{block.DateTimeCreated|date}}</label>
+                        </div>
+                    </div>
+                    <div class="row padding10 no-padding-right no-padding-bottom">
+                        <div class="cell">
+                            <label class="wt400"><b>Description:</b> {{block.Description}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row padding10 no-padding-right no-padding-bottom no-padding-left">
+                <div class="cell padding20 no-padding-right no-padding-bottom no-padding-left">
+                    <label><b>Upload new document (Maximum allowed file size is 5 MB)</b></label>
+                </div>
+            </div>
+            <div class="row padding10 no-padding-right no-padding-bottom no-padding-left">
+                <div class="cell">
+                    <div ng-hide="myFile">
+
+                        <input type="file" class="uload-file hide" id="file" data-bind-file="" data-ng-model="myFile" />
+                        <button class="button bt-blue" id="upload-button" ng-click="uploadFile()">Browse...</button>
+                    </div>
+                    <div class="file-upload-block" id="upload-file-block" ng-if="myFile">
+                        <div class="hide" id="upload-spinner">
+                            <span class="mif-loop2 mif-ani-spin"></span>
+                        </div>
+
+                        <!--
+                         <div class="row">
+                            <div id="pb1" class="progress gradient-bar large hide"
+                                 data-role="progress"></div>
+                        </div>
+                        -->
+
+                        <div class="row cells2 padding10">
+                            
+                            
+                            <div class="cell"><b>{{myFile.name}} ({{convertToMB(myFile.size)}} mb)</b></div>
+
+
+
+                            <!--
+                            <div>
+                                <button ng-click="runPB1()">run</button>
+                            </div>
+                            -->
+
+                            <div class="cell">
+                                <div class="place-right">
+                                    <span ng-click="add();$event.stopPropagation();"><img class="pointerClass" src="~/images/generic-upload-accent-minint-9fuqkui.png" /></span>
+                                    <span data-ng-click="cancelUpload()"><img class="pointerClass" src="~/images/generic-cross-12px-gray@2x-minint-9fuqkui.png" /></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row padding10">
+                            <div class="cell">
+                                <div><label>Attachment description</label></div>
+                                <div>
+                                    <input type="text" id="reportDesc" ng-model="myFile.attachmentDesc" class="input-control width100" ng-change=invalidDesc() placeholder="Attachment description" />
+                                    <span style="color:red;" ng-if="invalid_Description">Description is required</span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <span ng-if="reportUpload">File is being uploaded</span>
+                </div>
+            </div>
+            <div data-role="dialog" id="dialogDeleteReport" class="padding20 dialog deletePageModal" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-overlay-click-close="true" style="width: auto; height: auto; visibility: hidden; left: 328.5px; top: 287.5px;">
+                <h1 class="modalFont">Do you want to delete this report?</h1>
+                <div class="place-right marginTop50">
+                    <button class="pageDeleteConfirm button bt-next modalMargin" ng-click="deleteReport(id, url)" my-click-once>Yes</button>
+
+                    <button type="button" class="button modalCancel modalMargin" ng-click="deleteReportCancel()">No</button>
+                </div>
+                <span class="dialog-close-button"></span>
+            </div>
+        </div>
+
+
+        <!-- Reports block end here-->
+        <!-- Reports questionnaires start here-->
+
+
+        <div class="row questionnaires-block" ng-if="WFQuestioner">
+            <div class="cell" ng-repeat="block in questionnaireDetails">
+                <div class="row padding10 no-padding-right no-padding-bottom"></div>
+
+                <div class="row padding10 no-padding-right no-padding-bottom">
+                    <div class="cell">
+                        <label><a href="#" class="underline">{{block.questionnaireName}}</a></label>
+                    </div>
+                </div>
+                <div class="row padding10 no-padding-right no-padding-bottom">
+                    <div class="cell">
+                        <label>Status : <span>{{block.status}}</span></label>
+                    </div>
+                </div>
+                <div class="row padding10 no-padding-right no-padding-bottom">
+                    <div class="cell">
+                        <label>Started by {{block.startedBy}} on {{block.date}}</label>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+        <!-- Reports questionnaires end here-->
+        <!--
+
+
+        <div class="tabcontrol2">
+            <ul class="tabs">
+                <li><a href="#b1">Reviews</a></li>
+                <li><a href="#b2">Attachments</a></li>
+                <li><a href="#b3">Attachments</a></li>
+            </ul>
+
+
+            <div class="row">
+                <div class="cell">
+                    <div class="frames">
+                        <div class="frame" id="b1">
+                            <h1>block 1</h1>
+                        </div>
+
+                        <div class="frame" id="b2">
+                            <h1>block 2</h1>
+                        </div>
+                        <div class="frame" id="b3">
+                            <h1>block 3</h1>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+            -->
+
+    </div>
+
+
+    <div class="cell" ng-show="showHelpText">
+        <h3 class="no-margin" style="font-weight: 300!important">Your review</h3>
+        <div class="row">
+            <p>Please review the information on the left (if any) and provide your commentary on this entity.</p>
+        </div>
+        <button class="button bt-next" ng-click="hideHelpText()">Review</button>&nbsp;&nbsp;
+        <button class="button bt-blue saveQuestions">Delegate</button>
+    </div>
+
+
+    <div class="cell padding10 no-padding-right no-padding-top no-padding-bottom" ng-show="showReviewForm">
+        <h3 class="no-margin" style="font-weight: 300!important">Your review</h3>
+        @*<div class="row padding10 no-padding-right no-padding-left">
+                <p>Please Review the information on the left and provide your commentary on this entity.</p>
+            </div>*@
+        <div class="row">
+            <form name="reviewsForm">
+                <div class="row padding20 no-padding-left no-padding-right no-padding-bottom">
+                    <div>
+                        <label>Decision</label>
+                    </div>
+                    <div class="row no-padding-left no-padding-right no-padding-bottom">
+                        <div class="width70">
+                            <select id="reviewType" class="removeArrow" name="reviewType" ng-model="reviewType" ng-options="item.RecommendationId as item.Name for item in recoArray" ng-change="decisionChange()" ng-class="{true: 'error'}[submitted && reviewsForm.reviewType.$invalid]" required>
+                                <option value="" class="">Choose a review type...</option>
+                                @*<option value="0">Recommend</option>
+                                    <option value="1">Recommend with controls</option>
+                                    <option value="2">Do not recommend</option>
+                                    <option value="2">On Hold</option>*@
+
+                            </select>
+                            <span class="helpText-error" ng-show="submitted && reviewsForm.reviewType.$error.required">Decision is required</span>
+
+                        </div>
+                    </div>
+                    <div class="row padding10 no-padding-left no-padding-right no-padding-bottom" ng-show="showMultiDropdown">
+                        <div>
+                            <label>Controls</label>
+                        </div>
+                        <select id="reviewTypeMultiDropdown" multiple="multiple" class="area margin10 no-margin-left no-margin-right no-margin-bottom place-left clearLeft"></select>
+                    </div>
+                </div>
+
+
+                <!--Attachments for Reviews Section-->
+
+                <div class="row padding20 no-padding-left no-padding-right no-padding-bottom">
+                    <div>
+                        <label>Attachment (Maximum allowed file size is 5 MB)</label>
+                    </div>
+                </div>
+                <div class="cell" ng-repeat="detail in attachmentDetails | orderBy:'DateTimeCreated':true">
+                    <div class="attachments-block-box">
+                        <div class="row padding10 no-padding-right no-padding-top no-padding-bottom">
+                            <div class="cell">
+                                <label><a ng-href="{{detail.AttachmentUrl}}" class="underlinedText" target="_blank">{{detail.Name}}</a></label>
+                                <div class="place-right" ng-click="attachmentDelete($index)"><span class="ms-Icon ms-Icon--trash ms-Icon-Custom-Red-Delete"></span></div>
+                            </div>
+                        </div>
+
+                        <div class="row padding10 no-padding-right no-padding-bottom">
+                            <div class="cell">
+                                <label class="wt400"><b>Description:</b> {{detail.Description}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row padding10 no-padding-left no-padding-right no-padding-bottom">
+                    <div class="cell">
+
+                        <div ng-hide="reviewFile.name">
+
+                            <input type="file" review-file="reviewFile" class="uload-file hide" id="reviewFile" data-reviews-Attachment="" data-ng-model="reviewFile" />
+                            <button class="button bt-blue" id="upload-button" ng-click="uploadReviewFile()">Browse...</button>
+                        </div>
+                        
+
+                        <div class="reviewFile-upload-block" id="upload-review-file" ng-show="reviewFile.name">
+                            <div class="hide" id="upload-spinner-review">
+                                <span class="mif-loop2 mif-ani-spin"></span>
+                            </div>
+
+                            <!--
+                             <div class="row">
+                                <div id="pb1" class="progress gradient-bar large hide"
+                                     data-role="progress"></div>
+                            </div>
+                            -->
+
+                            <div class="row cells2 padding10">
+                                <div class="cell"><b>{{reviewFile.name}} ({{convertToMB(reviewFile.size)}} mb)</b></div>
+
+
+                                <!--
+                                <div>
+                                    <button ng-click="runPB1()">run</button>
+                                </div>
+                                -->
+
+                                <div class="cell">
+                                    <div class="place-right">
+                                        <span ng-click="addFile();$event.stopPropagation();"><img class="pointerClass" src="~/images/generic-upload-accent-minint-9fuqkui.png" /></span>
+                                        <span data-ng-click="cancelFileUpload()"><img class="pointerClass" src="~/images/generic-cross-12px-gray@2x-minint-9fuqkui.png" /></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row padding10">
+                                <div class="cell">
+                                    <div><label>Attachment description</label></div>
+                                    <div>
+                                        <input type="text" id="revAttachmentDesc" ng-model="reviewFile.attachmentDesc" class="input-control width100" ng-change=invalidDesc() placeholder="Attachment description" />
+                                        <span style="color:red;" ng-if="invalidDescription">Description is required</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span ng-if="attUpload">File is being uploaded</span>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row padding20 no-padding-left no-padding-right no-padding-bottom">
+                    <div>
+                        <label>Comments</label>
+                    </div>
+                    <div class="row no-padding-left no-padding-right no-padding-bottom">
+                        <div class="input-control textareaReview place-left clearLeft">
+                            <textarea id="reviewerComments" ng-model="comments" name="acComments"></textarea>
+                            @*<span class="help-inline" ng-show="submitted && acRequired">Comment is required</span>*@
+                            <span id="commentRequired" class="cmnt-error">Comment is required</span>
+
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row padding20 no-padding-left no-padding-right no-padding-bottom">
+            <div class="cell" style="margin-top:2%!important;">
+                <button class="button bt-next" ng-click="submitReview(2,reviewsForm)">Save</button>&nbsp;&nbsp;
+                <button class="button bt-blue saveQuestions" ng-click="showDialogAttestation(ReviewTypeId,reviewsForm)">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
